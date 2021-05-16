@@ -1,0 +1,14 @@
+image: localhost:5000/crossplane-examples:0.0.1
+imagePullPolicy: Always
+secret:
+  create: true
+  name: db-conn-secret
+# Environment variable listing
+env:
+  # non sensitive variables
+  # sensitive variables
+  secret:
+    endpoint: localhost
+    username: datalayer
+    password: datalayer
+#    port: "5432"

@@ -1,0 +1,30 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: wordpressclusters.example.crossplane.io
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: example.crossplane.io
+  names:
+    kind: WordpressCluster
+    listKind: WordpressClusterList
+    plural: wordpressclusters
+    singular: wordpresscluster
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A WordpressCluster is a composite resource that represents a K8S Cluster with Wordpress Installed
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                clusterVersion:
+                  type: string
+                  description: GKE cluster version
+              required:
+                - clusterVersion

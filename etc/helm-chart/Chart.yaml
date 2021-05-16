@@ -1,0 +1,12 @@
+apiVersion: v1
+description: Crossplane Examples.
+name: crossplane-examples
+version: 0.0.1
+appVersion: 0.0.1
+home: https://datalayer.io
+sources:
+- https://github.com/datalayer/datalayer-examples
+icon: https://raw.githubusercontent.com/datalayer/datalayer/main/res/logo/datalayer-square.png
+maintainers:
+- name: Eric Charles
+  email: eric@datalayer.io

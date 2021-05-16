@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crossplane-examples
+  labels:
+    app: crossplane-examples
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: crossplane-examples
+  template:
+    metadata:
+      labels:
+        app: crossplane-examples
+    spec:
+      containers:
+      - name: crossplane-examples
+        image: {{ .Values.image }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        ports:
+        - containerPort: 8765
+        env:
+#        {{- include "helpers.list-env-variables" . | indent 10 }}
+          - name: DB_LOCAL_START
+            value: "true"
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secret.name }}
+                key: endpoint
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secret.name }}
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.secret.name }}
+                key: password

@@ -1,0 +1,46 @@
+apiVersion: postgresql.sql.crossplane.io/v1alpha1
+kind: ProviderConfig
+metadata:
+  name: default
+spec:
+  credentials:
+    source: PostgreSQLConnectionSecret
+    connectionSecretRef:
+      namespace: crossplane-examples
+      name: db-conn-secret
+---
+apiVersion: postgresql.sql.crossplane.io/v1alpha1
+kind: Database
+metadata:
+  name: crossplane-examples
+  annotations:
+    crossplane.io/external-name: crossplane_examples
+spec:
+  forProvider: {}
+---
+apiVersion: postgresql.sql.crossplane.io/v1alpha1
+kind: Role
+metadata:
+  name: crossplane-example-role
+spec:
+  forProvider:
+    privileges:
+      createDb: true
+      login: true
+  writeConnectionSecretToRef:
+    name: crossplane-example-role-secret
+    namespace: crossplane-examples
+---
+apiVersion: postgresql.sql.crossplane.io/v1alpha1
+kind: Grant
+metadata:
+  name: example-grant-role-1-on-database
+spec:
+  forProvider:
+    privileges:
+      - CREATE
+    withOption: GRANT
+    roleRef:
+      name: crossplane-example-role
+    databaseRef:
+      name: crossplane-examples

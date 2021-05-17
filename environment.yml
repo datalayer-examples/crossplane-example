@@ -1,0 +1,10 @@
+name: crossplane-examples
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pip
+  - pytest
+  - python=3.9
+  - twine
+  - yarn=1.22.5

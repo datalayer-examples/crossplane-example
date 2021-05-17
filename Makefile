@@ -1,7 +1,11 @@
 # Copyright (c) Datalayer, Inc https://datalayer.io
 # Distributed under the terms of the MIT License.
 
-.PHONY: clean build dist
+CONDA_ACTIVATE=source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate ; conda activate
+CONDA_DEACTIVATE=source $$(conda info --base)/etc/profile.d/conda.sh ; conda deactivate
+CONDA_REMOVE=source $$(conda info --base)/etc/profile.d/conda.sh ; conda remove -y --all -n
+
+.PHONY: clean build dist env
 
 .EXPORT_ALL_VARIABLES:
 
@@ -21,27 +25,42 @@ clean:
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '__pycache__' -exec rm -fr {} +
 
+env:
+	-conda env create -f environment.yml 
+	@echo
+	@echo -----------------------------------------------
+	@echo ✨  Crossplane Examples Environment is installed
+	@echo -----------------------------------------------
+	@echo
+
 install:
-	python setup.py install
-	yarn install
+	($(CONDA_ACTIVATE) crossplane-examples; \
+		python setup.py install && \
+		yarn install )
 
 dev:
-	pip install -e .
+	($(CONDA_ACTIVATE) crossplane-examples; \
+		pip install -e . && \
+		yarn install )
 
 build:
-	python setup.py sdist bdist_egg bdist_wheel
-	yarn build
+	($(CONDA_ACTIVATE) crossplane-examples; \
+		python setup.py sdist bdist_egg bdist_wheel && \
+		yarn build )
 
 publish:
-	python setup.py sdist bdist_egg bdist_wheel upload
+	($(CONDA_ACTIVATE) crossplane-examples; \
+		python setup.py sdist bdist_egg bdist_wheel upload )
 
 repl:
-	PYTHONPATH=./dist/crossplane_examples-${VERSION}-py3-none-any.whl python
+	($(CONDA_ACTIVATE) crossplane-examples; \
+		PYTHONPATH=./dist/crossplane_examples-${VERSION}-py3-none-any.whl python )
 
 start:
 	echo open http://localhost:8765
 	echo open http://localhost:8765/api/crossplane
-	yarn start
+	($(CONDA_ACTIVATE) crossplane-examples; \
+		yarn start )
 
 # --progress=tty
 # --no-cache

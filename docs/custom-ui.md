@@ -13,7 +13,7 @@ You need on your local environment:
 - [Kubectl](https://kubernetes.io/docs/tasks/tools)
 - [Helm](https://helm.sh)
 
-## Environement
+## Environment
 
 ```bash
 # Create your conda environment.
@@ -27,7 +27,7 @@ make dev
 
 ## Create the application
 
-This will be a React.js packaged as a [single page web application](./../src) with a [python server](./../crossplane_examples) exposing REST endpoints. The UI allows you to insert and view a list of simple records from the Postgresql database. The endpoints connect to a Postgresql database. The database connection details are expected to be provided via environement variables.
+This will be a React.js packaged as a [single page web application](./../src) with a [python server](./../crossplane_examples) exposing REST endpoints. The UI allows you to insert and view a list of simple records from the Postgresql database. The endpoints connect to a Postgresql database. The database connection details are expected to be provided via environment variables.
 
 ```python
 conn = psycopg2.connect(

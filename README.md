@@ -12,11 +12,14 @@ See also the companion blog post [Crossplane by example](https://blog.datalayer.
   <img src="./res/crossplane.svg" />
 </div>
 
-This repository aims to complement the official [Crossplane documentation](https://crossplane.io/docs) to give step by step examples to deploy infrastruture and services on [Google Cloud](https://cloud.google.com) and can be applied to other clouds like [Amazon](https://aws.amazon.com), [Azure](https://azure.microsoft.com)...
+This repository aims to complement the official [Crossplane documentation](https://crossplane.io/docs) to give step-by-step examples to deploy infrastructure and services on [Google Cloud](https://cloud.google.com) and can be applied to other clouds like [Amazon](https://aws.amazon.com), [Azure](https://azure.microsoft.com)...
 
 We have a first section with standard flows like settting-up the environment, deploying managed and composite resources as helm chart... We also have a second section where we build our own application, a React.js user interface interacting with managed resources.
 
-We are trying to stick to some nomenclature like `Control Cluster` (the K8S cluster that hosts the Crossplane operator), `Workload Cluster` (the K8S clusters create by the Control Cluster).
+We are trying to stick to some nomenclature like:
+
+- `Control Cluster`: The K8S cluster that hosts the Crossplane operator.
+- `Workload Cluster`: The K8S clusters create by the Control Cluster.
 
 ## Standard Flows
 
@@ -44,6 +47,6 @@ How to [Troubleshoot](./docs/10-troubleshoot.md) if needed, hopefully not too mu
 
 ## Custom Web User Interface
 
-The UI allows you to insert and view a list of simple records from a Postgresql database deployed on GCP. Follow [these instructions](./docs/custom-ui.md) to get the following UI in your browser.
+Build and deploy a UI  to insert and view a list of records from a Postgresql table deployed on GCP. Follow [these instructions](./docs/custom-ui.md) to get the following UI in your browser.
 
 <img src="./res/users.png" style="max-width: 800px"/>

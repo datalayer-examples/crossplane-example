@@ -1,4 +1,4 @@
-## Step 4: Create GCP resources
+## Step 4: Create GCP managed resources
 
 ## Create a Managed Bucket
 

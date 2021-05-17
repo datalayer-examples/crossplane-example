@@ -11,7 +11,9 @@ kubectl describe provider crossplane-provider-gcp
 ```
 
 ```bash
-# Option 2 - The core Crossplane controller can install provider controllers and CRDs for you through its own provider packaging mechanism, which is triggered by the application of a Provider resource. For example, in order to request installation of the provider-gcp package, apply the following resource to the cluster where Crossplane is running. The field spec.package is where you refer to the container image of the provider. Crossplane Package Manager will unpack that container, register CRDs and set up necessary RBAC rules and then start the controllers.
+# Option 2 - The core Crossplane controller can install provider controllers and CRDs for you through its own provider packaging mechanism, which is triggered by the application of a Provider resource.
+# For example, in order to request installation of the provider-gcp package, apply the following resource to the cluster where Crossplane is running. The field spec.package is where you refer to the container image of the provider.
+# Crossplane Package Manager will unpack that container, register CRDs and set up necessary RBAC rules and then start the controllers.
 echo """
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
@@ -35,7 +37,9 @@ helm install crossplane \
 
 ## Alternatives
 
-Install more providers. Watch out when you install the `provider-helm to that open issue [provider-helm hides providerconfigs](https://github.com/crossplane-contrib/provider-helm/issues/89).
+Install more providers.
+
+Watch out when you install the more providers, the later providerconfigs may be hidden (read more on e.g. [provider-helm hides providerconfigs](https://github.com/crossplane-contrib/provider-helm/issues/89)).
 
 ```bash
 # Helm provider may be useful for you.
@@ -115,7 +119,7 @@ spec:
       key: credentials
 """ | kubectl create -f -
 kubectl get providerconfig default
-# Another GCP configuration, named gcp-provider-config.
+# Another GCP configuration, named gcp-provider-config, which is used in some examples.
 echo """
 apiVersion: gcp.crossplane.io/v1beta1
 kind: ProviderConfig

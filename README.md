@@ -32,7 +32,7 @@ Step 2: [Create a Control Cluster](./docs/02-control-cluster.md).
 
 Step 3: [GCP Provider on the Control cluster.](./docs/03-gcp-provider.md)
 
-Step 4: [Create managed resources](./docs/04-managed.md).
+Step 4: [Create GCP managed resources](./docs/04-managed.md).
 
 Step 5: [Deploy Helm releases](./docs/05-helm.md).
 

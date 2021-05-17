@@ -4,7 +4,7 @@
 
 This repository showcases different usecase for [Crossplane](https://crossplane.io) on top of [Google Cloud](https://cloud.google.com).
 
-See also the companion blog post [Crossplane by example](https://blog.datalayer.io/2021/05/16/crossplane-by-example).
+You can read more context on the companion blog post [Crossplane by example](https://blog.datalayer.io/2021/05/16/crossplane-by-example).
 
 > Ensure you have credits on GCloud to run these examples.
 
@@ -14,14 +14,15 @@ See also the companion blog post [Crossplane by example](https://blog.datalayer.
 
 This repository aims to complement the official [Crossplane documentation](https://crossplane.io/docs) to give step-by-step examples to deploy infrastructure and services on [Google Cloud](https://cloud.google.com) and can be applied to other clouds like [Amazon](https://aws.amazon.com), [Azure](https://azure.microsoft.com)...
 
-We have a first section with standard flows like settting-up the environment, deploying managed and composite resources as helm chart... We also have a second section where we build our own application, a React.js user interface interacting with managed resources.
+We have a first section with standard case like settting-up the environment, deploying managed and composite resources as helm chart... We also have a second section where we build our own application, a React.js user interface interacting with managed resources.
 
 We are trying to stick to some nomenclature like:
 
-- `Control Cluster`: The K8S cluster that hosts the Crossplane operator.
-- `Workload Cluster`: The K8S clusters create by the Control Cluster.
+- `Control Cluster`: The K8S cluster that hosts the Crossplane operator, in our case a [Kind](https://kind.sigs.k8s.io) cluster.
+- `Managed Resouces`: The managed infrastructure like cluster, database, IAM roles... created by the Control Cluster and running in the cloud.
+- `Workload Cluster`: The K8S managed clusters created by the Control Cluster and running in the cloud.
 
-## Standard Flows
+## Standard Cases
 
 You are expected to start from step 1 and follow-up step by step until the end. If you jump directly to a specific step, ensure your environment, including the shell environment variables, are set as expected.
 
@@ -47,6 +48,6 @@ How to [Troubleshoot](./docs/10-troubleshoot.md) if needed, hopefully not too mu
 
 ## Custom Web User Interface
 
-Build and deploy a UI  to insert and view a list of records from a Postgresql table deployed on GCP. Follow [these instructions](./docs/custom-ui.md) to get the following UI in your browser.
+Build and deploy a UI to insert and view a list of records from a Postgresql table deployed on GCP. Follow [these instructions](./docs/custom-ui.md) to get the following UI in your browser.
 
 <img src="./res/users.png" style="max-width: 800px"/>

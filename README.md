@@ -1,18 +1,14 @@
 [![Datalayer](https://raw.githubusercontent.com/datalayer/datalayer/main/res/logo/datalayer-25.svg?sanitize=true)](https://datalayer.io)
 
+<img src="./res/crossplane.svg" width="300"/>
+
 # Crossplane Examples
 
-This repository showcases different usecase for [Crossplane](https://crossplane.io) on top of [Google Cloud](https://cloud.google.com).
+This repository showcases different usecase for [Crossplane](https://crossplane.io) on top of [Google Cloud](https://cloud.google.com). It aims to complement the official [Crossplane documentation](https://crossplane.io/docs) to give step-by-step examples to deploy infrastructure and services on [Google Cloud](https://cloud.google.com). It focuses on GCP but can be applied to other clouds like [Amazon](https://aws.amazon.com), [Azure](https://azure.microsoft.com)...
 
-You can read more context on the companion blog post [Crossplane by example](https://blog.datalayer.io/2021/05/16/crossplane-by-example).
+You can read more context about Crossplane on the companion blog post [Crossplane by example](https://blog.datalayer.io/2021/05/16/crossplane-by-example).
 
-> Ensure you have credits on GCloud to run these examples.
-
-<div style="width: 300px">
-  <img src="./res/crossplane.svg" />
-</div>
-
-This repository aims to complement the official [Crossplane documentation](https://crossplane.io/docs) to give step-by-step examples to deploy infrastructure and services on [Google Cloud](https://cloud.google.com) and can be applied to other clouds like [Amazon](https://aws.amazon.com), [Azure](https://azure.microsoft.com)...
+> Ensure you have credits to spend on GCloud to run these examples.
 
 We have a first section with standard case like settting-up the environment, deploying managed and composite resources as helm chart... We also have a second section where we build our own application, a React.js user interface interacting with managed resources.
 

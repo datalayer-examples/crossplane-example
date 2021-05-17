@@ -2,13 +2,23 @@
 
 # Crossplane Examples
 
-WIP This repository showcases different usecase for [Crossplane](https://crossplane.io) on top of [Google Cloud](https://cloud.google.com). 
+> 🚧 This is WIP
+
+This repository showcases different usecase for [Crossplane](https://crossplane.io) on top of [Google Cloud](https://cloud.google.com).
+
+See also the companion blog post [Crossplane by example](https://blog.datalayer.io/2021/05/16/crossplane-by-example).
 
 > Ensure you have credits on GCloud to run these examples.
 
-<img src="./res/crossplane.svg" style="max-width: 300px"/>
+<div style="max-width: 300px">
+  <img src="./res/crossplane.svg" />
+</div>
 
-It is not aimed to replace the official [Crossplane documentation](https://crossplane.io/docs) and can be applied to other clouds like [Amazon](https://aws.amazon.com), [Azure](https://azure.microsoft.com)... We have a first section with a standard flow like settting-up the environment, deploying managed and composite resources as helm chart.... We also have a second section where we build our own application, a React.js user interface interacting with managed resources. You are expected to following from Step 1 to the end. If you jump directly to a specific Step, ensure your enviornement, including the shell environement variables, are set as expected.
+This repository aims to complement the official [Crossplane documentation](https://crossplane.io/docs) to give step by step examples to deploy infrastruture and services on [Google Cloud](https://cloud.google.com) and can be applied to other clouds like [Amazon](https://aws.amazon.com), [Azure](https://azure.microsoft.com)...
+
+We have a first section with a standard flow like settting-up the environment, deploying managed and composite resources as helm chart...
+
+We also have a second section where we build our own application, a React.js user interface interacting with managed resources. You are expected to following from Step 1 to the end. If you jump directly to a specific Step, ensure your enviornement, including the shell environment variables, are set as expected.
 
 ## Standard Flows
 

@@ -8,7 +8,7 @@ See also the companion blog post [Crossplane by example](https://blog.datalayer.
 
 > Ensure you have credits on GCloud to run these examples.
 
-<div style="max-width: 300px">
+<div style="width: 300px">
   <img src="./res/crossplane.svg" />
 </div>
 

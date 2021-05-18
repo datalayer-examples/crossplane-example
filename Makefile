@@ -108,10 +108,17 @@ docker-rm: ## remove the container.
 	docker rm -f crossplane-examples
 
 helm-update: ## update helm.
-	helm repo add datalayer s3://datalayer-helm/charts
+	helm repo add datalayer-examples https://helm.datalayer.io/examples
 	helm repo update
 
-helm-install: ## install helm.
+helm-build: # helm build.
+	helm package ./etc/helm-chart
+	ls crossplane-examples-${VERSION}.tgz
+
+helm-clean: # helm clean.
+	rm crossplane-examples-${VERSION}.tgz
+
+helm-install: ## install helm chart.
 	helm upgrade \
 		--install crossplane-examples \
 		datalayer/crossplane-examples \
@@ -120,7 +127,7 @@ helm-install: ## install helm.
 		--namespace crossplane-examples
 	make helm-status
 
-helm-deploy: ## deploy helm.
+helm-deploy: ## deploy helm chart.
 	helm upgrade \
 		--install crossplane-examples \
 		./etc/helm-chart \
@@ -135,22 +142,6 @@ helm-status: ## helm status - !!! Does not work in this env.
 
 helm-rm: # helm delete
 	helm delete crossplane-examples --namespace crossplane-examples
-
-helm-build: # helm build.
-	helm package ./etc/helm-chart
-	ls crossplane-examples-${VERSION}.tgz
-	mv crossplane-examples-${VERSION}.tgz helm-charts
-	helm repo index helm-charts --url http://datalayer-helm.s3.amazonaws.com/charts
-
-helm-clean: # helm clean.
-	rm crossplane-examples-${VERSION}.tgz
-
-helm-push: # helm push.
-	aws s3 cp \
-		helm-charts \
-		s3://datalayer-helm/charts \
-		--recursive \
-		--profile datalayer
 
 port-forward: # port forward.
 	echo open http://localhost:20000

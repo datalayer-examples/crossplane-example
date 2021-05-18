@@ -8,7 +8,7 @@ spec:
   forProvider:
     chart:
       name: crossplane-examples
-      repository: http://datalayer-helm.s3.amazonaws.com/charts
+      repository: http://charts.datalayer.io/charts
       version: 0.0.1
     namespace: crossplane-examples
     values:

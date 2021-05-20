@@ -7,7 +7,7 @@
     "clean": "rimraf dist",
     "start": "run-p -c start:*",
     "start:ui": "webpack-dev-server",
-    "start:server": " python -m crossplane_examples",
+    "start:server": "python -m crossplane_examples",
     "build": "webpack",
     "build:prod": "webpack --production",
     "build:tsc": "tsc",

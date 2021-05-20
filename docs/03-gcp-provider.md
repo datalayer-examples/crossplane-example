@@ -73,16 +73,14 @@ kubectl get xrd # for developers
 # Create service account key (this will create a `crossplane-gcp-provider-key.json` file in your current working directory)
 KEY_FILE=crossplane-gcp-provider-key.json
 gcloud iam service-accounts keys create $KEY_FILE --project $PROJECT_ID --iam-account $SERVICE_ACCOUNT
-# kubectl create secret generic gcp-creds -n $PROVIDER_SECRET_NAMESPACE --from-file=credentials=$KEY_FILE
-# rm $KEY_FILE
-#
+# Change this namespace value if you want to use a different namespace (e.g. gitlab-managed-apps)
+PROVIDER_SECRET_NAMESPACE=crossplane-system
+# Option 1
+kubectl create secret generic gcp-creds -n $PROVIDER_SECRET_NAMESPACE --from-file=creds=$KEY_FILE
+# Option 2
 GOOGLE_APPLICATION_CREDENTIALS=$PWD/$KEY_FILE
-# python py/sa_test.py
-#
 # Base64 encode the GCP credentials.
 BASE64ENCODED_GCP_PROVIDER_CREDS=$(base64 $KEY_FILE | tr -d "\n")
-# change this namespace value if you want to use a different namespace (e.g. gitlab-managed-apps)
-PROVIDER_SECRET_NAMESPACE=crossplane-system
 echo """
 apiVersion: v1
 kind: Secret
@@ -91,7 +89,7 @@ metadata:
   namespace: ${PROVIDER_SECRET_NAMESPACE}
 type: Opaque
 data:
-  credentials: ${BASE64ENCODED_GCP_PROVIDER_CREDS}
+  creds: ${BASE64ENCODED_GCP_PROVIDER_CREDS}
 """ | kubectl create -f -
 kubectl get secret gcp-creds -n $PROVIDER_SECRET_NAMESPACE
 kubectl describe secret gcp-creds -n $PROVIDER_SECRET_NAMESPACE
@@ -116,7 +114,7 @@ spec:
     secretRef:
       namespace: ${PROVIDER_SECRET_NAMESPACE}
       name: gcp-creds
-      key: credentials
+      key: creds
 """ | kubectl create -f -
 kubectl get providerconfig default
 # Another GCP configuration, named gcp-provider-config, which is used in some examples.
@@ -132,7 +130,7 @@ spec:
     secretRef:
       namespace: ${PROVIDER_SECRET_NAMESPACE}
       name: gcp-creds
-      key: credentials
+      key: creds
 """ | kubectl create -f -
 kubectl get providerconfig gcp-provider-config
 kubectl get providerconfigs

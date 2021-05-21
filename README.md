@@ -15,7 +15,7 @@ We have a first section with standard case like settting-up the environment, dep
 We are trying to stick to some nomenclature like:
 
 - `Control Cluster`: The K8S cluster that hosts the Crossplane operator, in our case a [Kind](https://kind.sigs.k8s.io) cluster.
-- `Managed Resouces`: The managed infrastructure like cluster, database, IAM roles... created by the Control Cluster and running in the cloud.
+- `Managed Resources`: The managed infrastructure like cluster, database, IAM roles... created by the Control Cluster and running in the cloud.
 - `Workload Cluster`: The K8S managed clusters created by the Control Cluster and running in the cloud.
 
 ## Standard Cases

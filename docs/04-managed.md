@@ -24,11 +24,12 @@ spec:
 kubectl get managed
 kubectl get bucket example
 kubectl describe bucket.storage.gcp.crossplane.io/example
-open https://console.cloud.google.com/storage/browser?project=$PROJECT_ID
+open https://console.cloud.google.com/storage/browser/$BUCKET_NAME?project=$PROJECT_ID
 ```
 
 ```bash
 # Destroy the bucket.
+kubectl delete bucket example
 kubectl delete bucket.storage.gcp.crossplane.io/example
 ```
 
@@ -66,8 +67,8 @@ kubectl get cloudsqlinstances
 kubectl get cloudsqlinstance crossplane-example-db
 kubectl describe secret db-conn-secret -n crossplane-examples
 kubectl get secret db-conn-secret -n crossplane-examples -o jsonpath='{.data.endpoint}' | base64 --decode
-open https://console.cloud.google.com/sql/instances?project=$PROJECT_ID
-kubectl delete cloudsqlinstance crossplane-example-db
+open https://console.cloud.google.com/sql/instances/crossplane-example-db-1?project=$PROJECT_ID
+kubectl delete cloudsqlinstance crossplane-example-db-1
 ```
 
 ```bash
@@ -288,6 +289,8 @@ open https://console.cloud.google.com/networking/networks/details/gke-test?proje
 
 ## Creata a Managed GKE cluster
 
+Pick a name for your GKE workload cluster.
+
 ```bash
 GKE_CLUSTER_NAME=cluster-example-1
 ```
@@ -404,7 +407,7 @@ kubectl describe nodepool.container.gcp.crossplane.io/$GKE_CLUSTER_NAME-np
 open https://console.cloud.google.com/kubernetes/list?project=$PROJECT_ID
 ```
 
-Get GKE kubeconfig.
+Get the GKE kubeconfig for your workload cluster.
 
 ```bash
 kubectl get secret $GKE_CLUSTER_NAME-conn -n crossplane-system

@@ -35,9 +35,7 @@ helm install crossplane \
   --set provider.packages={crossplane/provider-gcp:master}
 ```
 
-## Alternatives
-
-Install more providers.
+## Install more providers
 
 Watch out when you install the more providers, the later providerconfigs may be hidden (read more on e.g. [provider-helm hides providerconfigs](https://github.com/crossplane-contrib/provider-helm/issues/89)).
 
@@ -46,7 +44,7 @@ Watch out when you install the more providers, the later providerconfigs may be 
 kubectl crossplane install provider crossplane/provider-helm:master
 ```
 
-Install a `Configuration` shipping the providers.
+You calso install a `Configuration` shipping the providers.
 
 ```bash
 # Install platform-ref-gcp configuration that contains provider-gcp and provider-helm.
@@ -63,8 +61,7 @@ kubectl crossplane install configuration registry.upbound.io/xp/getting-started-
 kubectl get crds | grep gcp
 kubectl get crds | grep database
 kubectl get crds | grep postgresql
-#
-kubectl get xrd # for developers
+kubectl get xrd | grep postgresql
 ```
 
 ## Create Crossplane GCP Secret
@@ -75,9 +72,9 @@ KEY_FILE=crossplane-gcp-provider-key.json
 gcloud iam service-accounts keys create $KEY_FILE --project $PROJECT_ID --iam-account $SERVICE_ACCOUNT
 # Change this namespace value if you want to use a different namespace (e.g. gitlab-managed-apps)
 PROVIDER_SECRET_NAMESPACE=crossplane-system
-# Option 1
+# Option 1.
 kubectl create secret generic gcp-creds -n $PROVIDER_SECRET_NAMESPACE --from-file=creds=$KEY_FILE
-# Option 2
+# Option 2.
 GOOGLE_APPLICATION_CREDENTIALS=$PWD/$KEY_FILE
 # Base64 encode the GCP credentials.
 BASE64ENCODED_GCP_PROVIDER_CREDS=$(base64 $KEY_FILE | tr -d "\n")

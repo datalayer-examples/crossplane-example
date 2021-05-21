@@ -156,7 +156,7 @@ crossplane-apply: # crossplane deploy.
 crossplane-status: # crossplane status.
 	kubectl get managed
 
-platform-xrd-instal: # install platform ref.
+platform-xrd-install: # install platform ref.
 	kubectl apply -f ./etc/platform-ref-gcp/network
 	kubectl apply -f ./etc/platform-ref-gcp/cluster/services
 	kubectl apply -f ./etc/platform-ref-gcp/cluster/gke

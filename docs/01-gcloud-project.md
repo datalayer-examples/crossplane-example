@@ -57,7 +57,7 @@ gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SER
 gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SERVICE_ACCOUNT" --role="roles/compute.networkAdmin"
 gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SERVICE_ACCOUNT" --role="roles/storage.admin"
 gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SERVICE_ACCOUNT" --role="roles/cloudsql.admin"
-gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SERVICE_ACCOUNT" --role="roles/redis.admin"
 # Enable Additional roles needed for the example or project.
 # Run `gcloud iam roles list` for a complete list.
+# gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SERVICE_ACCOUNT" --role="roles/redis.admin"
 ```

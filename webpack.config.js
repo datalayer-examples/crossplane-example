@@ -18,14 +18,14 @@ if (IS_PRODUCTION) {
 
 module.exports = {
   entry: "./src/index",
-  mode: "development",
+  mode: mode,
   watchOptions: {
     aggregateTimeout: 300,
     poll: 2000, // Seems to stabilise HMR file change detection
     ignored: "/node_modules/"
   },
   devServer: {
-    contentBase: path.join(__dirname, "dist"),
+    static: path.join(__dirname, "dist"),
     port: 3003,
     historyApiFallback: true,
   },
@@ -34,7 +34,7 @@ module.exports = {
     minimize: minimize,
   },
   output: {
-    publicPath: "./",
+    publicPath: "http://localhost:3003/",
     filename: '[name].[contenthash].crossplaneExamples.js',
   },
   resolve: {
@@ -114,9 +114,6 @@ module.exports = {
      ]
   },
   plugins: [
-//    new webpack.ProvidePlugin({
-//      process: 'process/browser'
-//    }),  
     new webpack.DefinePlugin({
       "process.env": "{}"
     }),

@@ -18,7 +18,7 @@ render(
   <React.StrictMode>
     <Database
       formName='Create a user'
-      formDescription='The data is coming from the Postgresql database instance.'
+      formDescription='Data from the Postgresql database.'
       />
   </React.StrictMode>,
   document.getElementById('root')

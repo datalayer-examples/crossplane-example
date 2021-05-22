@@ -154,7 +154,7 @@ kubectl describe database.postgresql.sql.crossplane.io/example
 ```
 
 ```bash
-# Connect to the database https://cloud.google.com/sql/docs/postgres/connect-admin-ip
+# Connect to the database https://cloud.google.com/sql/docs/postgstatic/images/connect-admin-ip
 export DB_ENDPOINT=$(kubectl get secret db-conn -n default -o jsonpath='{.data.endpoint}' | base64 --decode)
 export DB_PORT=$(kubectl get secret db-conn -n default -o jsonpath='{.data.port}' | base64 --decode)
 export DB_USERNAME=$(kubectl get secret db-conn -n default -o jsonpath='{.data.username}' | base64 --decode)

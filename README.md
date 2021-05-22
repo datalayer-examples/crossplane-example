@@ -2,7 +2,7 @@
 
 # Crossplane Examples
 
-<img src="./res/crossplane.svg" width="300"/>
+<img src="./static/images/crossplane.svg" width="300"/>
 
 This repository showcases different usecase for [Crossplane](https://crossplane.io) on top of [Google Cloud](https://cloud.google.com). It aims to complement the official [Crossplane documentation](https://crossplane.io/docs) to give step-by-step examples to deploy infrastructure and services on [Google Cloud](https://cloud.google.com). It focuses on GCP but can be applied to other clouds like [Amazon](https://aws.amazon.com), [Azure](https://azure.microsoft.com)...
 
@@ -46,7 +46,7 @@ How to [Troubleshoot](./docs/10-troubleshoot.md) if needed, hopefully not too mu
 
 Build and deploy a UI to insert and view a list of rows from a Postgresql table deployed on GCP. Follow [these instructions](./docs/custom-ui.md) to get the following UI in your browser.
 
-<img src="./res/users.png" style="max-width: 800px"/>
+<img src="./static/images/users.png" style="max-width: 800px"/>
 
 ## Bare Minimum Setup
 

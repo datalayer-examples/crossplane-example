@@ -2,7 +2,7 @@
 
 You are going to build and deploy a UI (React.js web application) to connect to a database created by Crossplane.
 
-<img src="./../res/users.png" style="max-width: 800px"/>
+<img src="./../static/images/users.png" style="max-width: 800px"/>
 
 ## Prerequisites
 

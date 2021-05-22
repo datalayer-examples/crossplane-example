@@ -9,7 +9,7 @@
     "start:ui": "webpack serve",
     "start:server": "python -m crossplane_examples",
     "build": "webpack",
-    "build:prod": "webpack --production",
+    "build:prod": "webpack --mode=production",
     "build:tsc": "tsc"
   },
   "dependencies": {

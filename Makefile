@@ -73,16 +73,16 @@ docker-build: ## build the image.
 	  -f Dockerfile \
 	  .
 
-docker-push: ## push the image.
-	docker push \
-	  localhost:5000/crossplane-examples:${VERSION}
-
 docker-tag: ## push the image.
 	docker tag \
 	  localhost:5000/crossplane-examples:${VERSION} \
 	  ${REGISTRY}/crossplane-examples:${VERSION}
 
-docker-push-datalayer: docker-tag ## push the image.
+docker-push-local: ## push the image.
+	docker push \
+	  localhost:5000/crossplane-examples:${VERSION}
+
+docker-push-registry: docker-tag ## push the image.
 	docker push \
 	  ${REGISTRY}/crossplane-examples:${VERSION}
 
@@ -110,7 +110,7 @@ docker-stop: ## stop the container.
 docker-rm: ## remove the container.
 	docker rm -f crossplane-examples
 
-helm-update: ## update helm.
+helm-repo-update: ## update helm.
 	helm repo add datalayer-examples https://helm.datalayer.io/examples
 	helm repo update
 
@@ -130,13 +130,16 @@ helm-install: ## install helm chart.
 		--namespace crossplane-examples
 	make helm-status
 
-helm-deploy: ## deploy helm chart.
+helm-install-local: ## install helm chart locally.
 	helm upgrade \
 		--install crossplane-examples \
 		./etc/helm-chart \
 		--create-namespace \
 		--namespace crossplane-examples
 	make helm-status
+
+helm-delete: ## delete helm chart locally.
+	helm delete crossplane-examples --namespace crossplane-examples
 
 helm-status: ## helm status - !!! Does not work in this env.
 	echo open http://localhost:30000

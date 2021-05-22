@@ -16,20 +16,18 @@ You need the following tools on your local environment.
 ## Environment
 
 ```bash
-# First remove if you want to start from zero.
-# make env-rm
+# Remove the existing environement if you want to start from zero.
+conda deactivate && \
+  make env-rm
 # Create your conda environment.
 make env
-```
-
-```bash
 # Install the node and python dependencies and be ready to rock the dev.
 make dev
 ```
 
 ## Build the application
 
-This will be a [React.js web application](./../src) with a [python server](./../crossplane_examples) exposing REST endpoints.
+You are going to build a [React.js web application](./../src) backed by a [python server](./../crossplane_examples) exposing REST endpoints.
 
 The UI allows you to insert and view a list of simple records from the Postgresql database.
 
@@ -47,13 +45,14 @@ conn = psycopg2.connect(
 
 ## Test with a local database
 
-You need a running Postgresql database with e.g. a role `datalayer`
+You need a running Postgresql database with a role, e.g. `datalayer`.
+
+!!! You will need a user with the same name as the chosen role on your operating system...
 
 ```bash
 # Create the crossplane_examples database.
 createdb crossplane_examples
 # Create a user, e.g. datalayer
-# !!! You will need a user with the same name on your operating system...
 createuser --interactive --pwprompt
 ```
 
@@ -62,23 +61,26 @@ createuser --interactive --pwprompt
 psql -c "CREATE TABLE USERS(ID SERIAL, FIRST_NAME TEXT NOT NULL, LAST_NAME TEXT NOT NULL);" -d crossplane_examples
 -- Grant the USERS table.
 psql -c "GRANT ALL PRIVILEGES ON DATABASE USERS TO datalayer;" -d crossplane_examples
+-- Add dummy data.
+psql -c "INSERT INTO USERS(first_name, last_name) VALUES('Charlie', 'Brown');" -d crossplane_examples
+psql -c "SELECT * FROM USERS;" -d crossplane_examples
 ```
 
 ```bash
-# Save your config in a .env file.
-echo """DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=datalayer
-DB_PASSWORD=datalayer""" > .env
+# Save your database connection details in a .env file.
+echo """export DB_HOST=localhost
+export DB_PORT=5432
+export DB_USERNAME=datalayer
+export DB_PASSWORD=datalayer""" > .env
 # Source that .env file in your shell environment.
 source .env
 ```
 
-You are now ready to run the application.
+You are now ready to run the application on your local environement.
 
 ```bash
-# open http://localhost:3003
-# open http://localhost:8765
+# open http://localhost:3003 # The Webpack server.
+# open http://localhost:8765 # The Python server.
 make start
 ```
 
@@ -87,33 +89,55 @@ make start
 ```bash
 # Build a local docker image and push it to your registry.
 make docker-build
-REGISTRY=<YOUR_REGISTRY> make docker-tag docker-push
+# Push to local registry.
+make docker-push-local
+# Push to your registry.
+REGISTRY=<YOUR_REGISTRY> make docker-push-registry
 ```
 
-## 🚧 Run on the Control cluster
-
-🚧 TBD
+## Run on the Control cluster
 
 ```bash
-# Install the Helm chart
-make helm-install.
+# Install the Helm chart.
+make helm-install-local
+watch make helm-status
+```
+
+```bash
+# Connect with a proxy.
+echo open http://localhost:8001/api/v1/namespaces/crossplane-examples/services/http:crossplane-examples-service:8765/proxy/
+kubectl proxy
+# 🚧 The following does not work yet...
+open http://localhost:30000
+```
+
+```bash
+make helm-delete
 ```
 
 ## 🚧 Run on a Workload cluster
 
-🚧 TBD
-
 ```bash
+# 🚧 TBD
 make crossplane-apply
 make crossplane-status
 ```
 
 ```bash
-# Install the Helm chart.
+# 🚧 Install the Helm chart.
 make helm-install
 ```
 
 ```bash
+# Connect with a proxy.
+echo open http://localhost:8001/api/v1/namespaces/crossplane-examples/services/http:crossplane-examples-service:8765/proxy/
+kubectl proxy
+# 🚧 The following does not work yet...
+open http://localhost:30000
+```
+
+```bash
+# 🚧 Connect to the database.
 export DB_ENDPOINT=$(kubectl get secret crossplane-example-role-secret -n crossplane-examples -o jsonpath='{.data.endpoint}' | base64 --decode)
 export DB_USERNAME=$(kubectl get secret crossplane-example-role-secret -n crossplane-examples -o jsonpath='{.data.username}' | base64 --decode)
 export DB_PASSWORD=$(kubectl get secret crossplane-example-role-secret -n crossplane-examples -o jsonpath='{.data.password}' | base64 --decode)

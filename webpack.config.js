@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 const path = require("path");
 
-const IS_PRODUCTION = process.argv.indexOf('--production') > -1;
+const IS_PRODUCTION = process.argv.indexOf('--mode=production') > -1;
 let mode = "development";
 if (IS_PRODUCTION) {
   mode = "production";
@@ -14,6 +14,10 @@ if (IS_PRODUCTION) {
 let minimize = false;
 if (IS_PRODUCTION) {
   minimize = true;
+}
+let publicPath = "http://localhost:3003/";
+if (IS_PRODUCTION) {
+  publicPath = "./";
 }
 
 module.exports = {
@@ -34,7 +38,7 @@ module.exports = {
     minimize: minimize,
   },
   output: {
-    publicPath: "http://localhost:3003/",
+    publicPath: publicPath,
     filename: '[name].[contenthash].crossplaneExamples.js',
   },
   resolve: {

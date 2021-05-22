@@ -10,7 +10,7 @@ You can read more context about Crossplane on the companion blog post [Crossplan
 
 > Ensure you have credits to spend on GCloud to run these examples.
 
-We have a first section with standard case like settting-up the environment, deploying managed and composite resources as helm chart... We also have a second section where we build our own application, a React.js user interface interacting with a managed database.
+We have a first section with use case like settting-up the environment, deploying managed and composite resources as helm chart... We also have a second section where we build a custom React.js user interface interacting with a managed database.
 
 We are trying to stick to some defintions:
 
@@ -18,7 +18,7 @@ We are trying to stick to some defintions:
 - `Managed resources`: The managed infrastructure like Kubernetes clusters, databases, IAM roles... created by the Control cluster and running in the cloud.
 - `Workload cluster`: The Kubernetes managed clusters created by the Control cluster and running in the cloud.
 
-## Standard Cases
+## Use Cases
 
 You are expected to start from step 1 and follow-up step by step until the end. If you jump directly to a specific step, ensure your environment, including the shell environment variables, are set as expected.
 
@@ -48,7 +48,7 @@ Build and deploy a UI to insert and view a list of rows from a Postgresql table 
 
 <img src="./res/users.png" style="max-width: 800px"/>
 
-## Bare Minimum
+## Bare Minimum Setup
 
 Assuming you have already setup a GCloud project with a service account and the Crossplanne CLI, the bare minimun to run is the following.
 

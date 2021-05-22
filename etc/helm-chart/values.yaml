@@ -1,5 +1,6 @@
 image: localhost:5000/crossplane-examples:0.0.1
 imagePullPolicy: Always
+startDatabase: "false"
 secret:
   create: true
   name: db-conn-secret

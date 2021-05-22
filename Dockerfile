@@ -5,7 +5,6 @@ FROM ubuntu:18.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-
 RUN apt-get update && \
     apt-get install -y \
         curl git gcc g++ make sudo \
@@ -44,9 +43,9 @@ COPY . /opt/crossplane-examples/
 
 RUN pip3 install -e .
 
-RUN yarn && yarn build
+RUN yarn && yarn build:prod
 
-RUN sed -i "s|http://localhost:8765||g" dist/index.html
+RUN sed -i "s|http://localhost:8765|.|g" dist/index.html
 
 EXPOSE 8765
 

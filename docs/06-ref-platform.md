@@ -24,7 +24,7 @@ kubectl get secrets -n crossplane-system | grep gkecluster
 make platform-destroy
 ```
 
-## Claim a platform (details)
+## Claim a platform (step by step)
 
 ```bash
 # Taken from https://raw.githubusercontent.com/upbound/platform-ref-multi-k8s/master/examples/network-gcp.yaml

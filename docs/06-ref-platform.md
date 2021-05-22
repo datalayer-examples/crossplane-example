@@ -8,7 +8,7 @@ kubectl get xrd
 ```
 
 ```bash
-# https://raw.githubusercontent.com/upbound/platform-ref-multi-k8s/master/examples/network-gcp.yaml
+# Taken from https://raw.githubusercontent.com/upbound/platform-ref-multi-k8s/master/examples/network-gcp.yaml
 echo """
 apiVersion: multik8s.platformref.crossplane.io/v1alpha1
 kind: Network
@@ -26,7 +26,7 @@ k get networks
 ```
 
 ```bash
-# https://raw.githubusercontent.com/upbound/platform-ref-multi-k8s/master/examples/cluster-gcp.yaml
+# Taken from https://raw.githubusercontent.com/upbound/platform-ref-multi-k8s/master/examples/cluster-gcp.yaml
 echo """
 apiVersion: multik8s.platformref.crossplane.io/v1alpha1
 kind: Cluster

@@ -1,4 +1,4 @@
-# Step 5: Deploy Helm charts
+# Step 5: Deploy Helm releases
 
 ## Install Helm Provider
 
@@ -62,6 +62,32 @@ spec:
 kubectl get helm
 kubectl get pods,svc -n wordpress
 echo open http://localhost:8001/api/v1/namespaces/wordpress/services/http:wordpress-example:80/proxy/
+kubectl proxy
+```
+
+```bash
+# https://github.com/stefanprodan/podinfo
+echo """
+apiVersion: helm.crossplane.io/v1beta1
+kind: Release
+metadata:
+  name: podinfo-example
+spec:
+  providerConfigRef:
+    name: helm-provider
+  forProvider:
+    chart:
+      name: podinfo
+      repository: https://stefanprodan.github.io/podinfo
+    namespace: podinfo
+    values:
+      replicaCount: 2 
+      backend: http://backend-podinfo:9898/echo
+""" | kubectl apply -f -
+kubectl get helm
+kubectl describe release.helm.crossplane.io/podinfo-example
+watch kubectl get pods,svc -n podinfo
+echo -e open http://localhost:8001/api/v1/namespaces/podinfo/services/http:podinfo-example:9898/proxy/
 kubectl proxy
 ```
 
@@ -137,7 +163,6 @@ spec:
     chart:
       name: podinfo
       repository: https://stefanprodan.github.io/podinfo
-#      version: 9.3.19
     namespace: podinfo
     values:
       replicaCount: 2 

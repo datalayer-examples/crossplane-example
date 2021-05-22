@@ -80,11 +80,11 @@ docker-push: ## push the image.
 docker-tag: ## push the image.
 	docker tag \
 	  localhost:5000/crossplane-examples:${VERSION} \
-	  datalayer/crossplane-examples:${VERSION}
+	  ${REGISTRY}/crossplane-examples:${VERSION}
 
 docker-push-datalayer: docker-tag ## push the image.
 	docker push \
-	  datalayer/crossplane-examples:${VERSION}
+	  ${REGISTRY}/crossplane-examples:${VERSION}
 
 docker-start: ## start the container.
 	echo open http://localhost:8765
@@ -165,6 +165,6 @@ platform-xrd-install: # install platform ref.
 platform-deploy: # deploy platform ref.
 	kubectl apply -f ./etc/platform-ref-gcp/examples
 
-kubeconfig: # get kubeconfig
+platform-kubeconfig: # get kubeconfig
 	echo $(kubectl get secret cluster-conn -n default -o jsonpath='{.data.kubeconfig}') | base64 --decode > kubeconfig
 	cat kubeconfig

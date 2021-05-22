@@ -6,12 +6,12 @@ You are going to build and deploy a UI (React.js web application) to connect to 
 
 ## Prerequisites
 
-You need on your local environment:
+You need the following tools on your local environment.
 
 - [Conda](https://docs.conda.io/en/latest/miniconda.html).
-- A running [Postgresql](https://www.postgresql.org) server (if you want to test the UI locally).
 - [Kubectl](https://kubernetes.io/docs/tasks/tools).
 - [Helm](https://helm.sh).
+- Optionally, a running [Postgresql](https://www.postgresql.org) server if you want to test the UI locally.
 
 ## Environment
 
@@ -27,7 +27,7 @@ make env
 make dev
 ```
 
-## Create the application
+## Build the application
 
 This will be a [React.js web application](./../src) with a [python server](./../crossplane_examples) exposing REST endpoints.
 
@@ -50,18 +50,10 @@ conn = psycopg2.connect(
 You need a running Postgresql database with e.g. a role `datalayer`
 
 ```bash
-echo """DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=datalayer
-DB_PASSWORD=datalayer""" > .env
-source .env
-```
-
-```bash
 # Create the crossplane_examples database.
 createdb crossplane_examples
 # Create a user, e.g. datalayer
-# !!! You will need a user with the same name on your Operating System...
+# !!! You will need a user with the same name on your operating system...
 createuser --interactive --pwprompt
 ```
 
@@ -70,10 +62,19 @@ createuser --interactive --pwprompt
 psql -c "CREATE TABLE USERS(ID SERIAL, FIRST_NAME TEXT NOT NULL, LAST_NAME TEXT NOT NULL);" -d crossplane_examples
 -- Grant the USERS table.
 psql -c "GRANT ALL PRIVILEGES ON DATABASE USERS TO datalayer;" -d crossplane_examples
--- psql -c "DELETE FROM USERS;" -d crossplane_examples
 ```
 
-You should be ready to run the application.
+```bash
+# Save your config in a .env file.
+echo """DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=datalayer
+DB_PASSWORD=datalayer""" > .env
+# Source that .env file in your shell environment.
+source .env
+```
+
+You are now ready to run the application.
 
 ```bash
 # open http://localhost:3003
@@ -81,31 +82,35 @@ You should be ready to run the application.
 make start
 ```
 
-## Prepare to run on a Cluster
+## Prepare the Docker image
 
 ```bash
-# Prepare a Docker image
+# Build a local docker image and push it to your registry.
 make docker-build
-make docker-push
+REGISTRY=<YOUR_REGISTRY> make docker-tag docker-push
 ```
 
-```bash
-# Prepare the Helm chart
-make helm-install
-make helm-deploy
-```
-
-## 🚧 Run on the Control Cluster
+## 🚧 Run on the Control cluster
 
 🚧 TBD
 
-## 🚧 Run on a Workload Cluster
+```bash
+# Install the Helm chart
+make helm-install.
+```
+
+## 🚧 Run on a Workload cluster
 
 🚧 TBD
 
 ```bash
 make crossplane-apply
 make crossplane-status
+```
+
+```bash
+# Install the Helm chart.
+make helm-install
 ```
 
 ```bash

@@ -14,19 +14,19 @@ We have a first section with standard case like settting-up the environment, dep
 
 We are trying to stick to some nomenclature like:
 
-- `Control Cluster`: The K8S cluster that hosts the Crossplane operator, in our case a [Kind](https://kind.sigs.k8s.io) cluster.
-- `Managed Resources`: The managed infrastructure like cluster, database, IAM roles... created by the Control Cluster and running in the cloud.
-- `Workload Cluster`: The K8S managed clusters created by the Control Cluster and running in the cloud.
+- `Control cluster`: The K8S cluster that hosts the Crossplane operator, in our case a [Kind](https://kind.sigs.k8s.io) cluster.
+- `Managed resources`: The managed infrastructure like cluster, database, IAM roles... created by the Control Cluster and running in the cloud.
+- `Workload cluster`: The K8S managed clusters created by the Control Cluster and running in the cloud.
 
 ## Standard Cases
 
 You are expected to start from step 1 and follow-up step by step until the end. If you jump directly to a specific step, ensure your environment, including the shell environment variables, are set as expected.
 
-Step 1: [Create GCloud Project](./docs/01-gcloud-project.md).
+Step 1: [Create GCloud project](./docs/01-gcloud-project.md).
 
-Step 2: [Create a Control Cluster](./docs/02-control-cluster.md).
+Step 2: [Create a Control cluster](./docs/02-control-cluster.md).
 
-Step 3: [GCP Provider on the Control cluster.](./docs/03-gcp-provider.md)
+Step 3: [Create a GCP Provider on the Control cluster](./docs/03-gcp-provider.md)
 
 Step 4: [Create GCP managed resources](./docs/04-managed.md).
 

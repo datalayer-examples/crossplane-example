@@ -1,9 +1,10 @@
-# Step 3: Enable Crossplane for Google Cloud on the Kubernetes cluster
+# Step 3: Create a GCP Provider on the Control cluster
 
 ## Install Crossplane GCP Provider
 
 ```bash
 # Option 1 - Using the Crossplane CLI.
+# kubectl crossplane install provider crossplane/provider-gcp:v0.17.1
 kubectl crossplane install provider crossplane/provider-gcp:master
 kubectl get pkg
 watch kubectl get providers
@@ -12,7 +13,8 @@ kubectl describe provider crossplane-provider-gcp
 
 ```bash
 # Option 2 - The core Crossplane controller can install provider controllers and CRDs for you through its own provider packaging mechanism, which is triggered by the application of a Provider resource.
-# For example, in order to request installation of the provider-gcp package, apply the following resource to the cluster where Crossplane is running. The field spec.package is where you refer to the container image of the provider.
+# For example, in order to request installation of the provider-gcp package, apply the following resource to the cluster where Crossplane is running.
+# The field spec.package is where you refer to the container image of the provider.
 # Crossplane Package Manager will unpack that container, register CRDs and set up necessary RBAC rules and then start the controllers.
 echo """
 apiVersion: pkg.crossplane.io/v1
@@ -41,6 +43,7 @@ Watch out when you install the more providers, the later providerconfigs may be 
 
 ```bash
 # Helm provider may be useful for you.
+# kubectl crossplane install provider crossplane/provider-helm:v0.7.0
 kubectl crossplane install provider crossplane/provider-helm:master
 ```
 
@@ -72,8 +75,15 @@ KEY_FILE=crossplane-gcp-provider-key.json
 gcloud iam service-accounts keys create $KEY_FILE --project $PROJECT_ID --iam-account $SERVICE_ACCOUNT
 # Change this namespace value if you want to use a different namespace (e.g. gitlab-managed-apps)
 PROVIDER_SECRET_NAMESPACE=crossplane-system
+```
+
+```bash
 # Option 1.
 kubectl create secret generic gcp-creds -n $PROVIDER_SECRET_NAMESPACE --from-file=creds=$KEY_FILE
+rm $KEY_FILE
+```
+
+```bash
 # Option 2.
 GOOGLE_APPLICATION_CREDENTIALS=$PWD/$KEY_FILE
 # Base64 encode the GCP credentials.

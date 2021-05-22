@@ -1,6 +1,6 @@
 [![Datalayer](https://raw.githubusercontent.com/datalayer/datalayer/main/res/logo/datalayer-25.svg?sanitize=true)](https://datalayer.io)
 
-# Step 2: Control Cluster
+# Step 2: Create a Control cluster
 
 ## Setup Kubectl Crossplane CLI
 
@@ -33,7 +33,7 @@ k get deployment hello-server
 k delete deployment hello-server
 ```
 
-## Deploy Crossplane Controller on the Control Cluster
+## Deploy Crossplane Controller on the Control cluster
 
 ```bash
 # https://crossplane.github.io/docs/v1.2/reference/install.html

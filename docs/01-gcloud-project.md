@@ -1,6 +1,6 @@
 [![Datalayer](https://raw.githubusercontent.com/datalayer/datalayer/main/res/logo/datalayer-25.svg?sanitize=true)](https://datalayer.io)
 
-# Step 1: Setup the prerequisistes
+# Step 1: Create GCloud project
 
 ```bash
 # Get to https://console.cloud.google.com/billing and copy the Billing Account ID value.

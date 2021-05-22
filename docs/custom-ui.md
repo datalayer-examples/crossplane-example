@@ -107,12 +107,16 @@ watch make helm-status
 # Connect with a proxy.
 echo open http://localhost:8001/api/v1/namespaces/crossplane-examples/services/http:crossplane-examples-service:8765/proxy/
 kubectl proxy
-# 🚧 The following does not work yet...
+# Connect with a port-forwrd.
+open http://localhost:30000
+make port-forward
+# 🚧 The nodeport does not work yet...
 open http://localhost:30000
 ```
 
 ```bash
-make helm-delete
+# Uninstall the helm chart.
+make helm-rm
 ```
 
 ## 🚧 Run on a Workload cluster
@@ -144,4 +148,9 @@ export DB_PASSWORD=$(kubectl get secret crossplane-example-role-secret -n crossp
 PGPASSWORD=$DB_PASSWORD psql "dbname=crossplane_examples user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
 \l
 \q
+```
+
+```bash
+# Uninstall the helm chart.
+make helm-rm
 ```

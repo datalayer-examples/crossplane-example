@@ -65,6 +65,22 @@ start:
 	($(CONDA_ACTIVATE) crossplane-examples; \
 		yarn start )
 
+platform-install: # install platform ref.
+	kubectl apply -f ./etc/platform-ref-gcp/network
+	kubectl apply -f ./etc/platform-ref-gcp/cluster/services
+	kubectl apply -f ./etc/platform-ref-gcp/cluster/gke
+	kubectl apply -f ./etc/platform-ref-gcp/cluster
+
+platform-claim: # deploy platform ref.
+	kubectl apply -f ./etc/platform-ref-gcp/examples
+
+platform-destroy: # deploy platform ref.
+	kubectl delete -f ./etc/platform-ref-gcp/examples
+
+platform-kubeconfig: # get kubeconfig
+	@exec echo $(kubectl get secret cluster-conn -n default -o jsonpath='{.data.kubeconfig}') | base64 --decode > kubeconfig
+	@exec cat kubeconfig
+
 # --progress=tty
 # --no-cache
 docker-build: ## build the image.
@@ -138,9 +154,6 @@ helm-install-local: ## install helm chart locally.
 		--namespace crossplane-examples
 	make helm-status
 
-helm-delete: ## delete helm chart locally.
-	helm delete crossplane-examples --namespace crossplane-examples
-
 helm-status: ## helm status - !!! Does not work in this env.
 	echo open http://localhost:30000
 	helm ls -n crossplane-examples
@@ -150,27 +163,11 @@ helm-rm: # helm delete
 	helm delete crossplane-examples --namespace crossplane-examples
 
 port-forward: # port forward.
-	echo open http://localhost:20000
-	kubectl port-forward service/crossplane-examples-service 20000:80 -n crossplane-examples
+	echo open http://localhost:30000
+	kubectl port-forward service/crossplane-examples-service 30000:8765 -n crossplane-examples
 
 crossplane-apply: # crossplane deploy.
 	kubectl apply -f ./etc/managed
 
 crossplane-status: # crossplane status.
 	kubectl get managed
-
-platform-install: # install platform ref.
-	kubectl apply -f ./etc/platform-ref-gcp/network
-	kubectl apply -f ./etc/platform-ref-gcp/cluster/services
-	kubectl apply -f ./etc/platform-ref-gcp/cluster/gke
-	kubectl apply -f ./etc/platform-ref-gcp/cluster
-
-platform-claim: # deploy platform ref.
-	kubectl apply -f ./etc/platform-ref-gcp/examples
-
-platform-destroy: # deploy platform ref.
-	kubectl delete -f ./etc/platform-ref-gcp/examples
-
-platform-kubeconfig: # get kubeconfig
-	@exec echo $(kubectl get secret cluster-conn -n default -o jsonpath='{.data.kubeconfig}') | base64 --decode > kubeconfig
-	@exec cat kubeconfig

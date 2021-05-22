@@ -46,6 +46,7 @@ __pycache__
 kubeconfig
 helm-charts
 **/*-provider-key.json
+**/*.xpkg
 
 ### Include
 

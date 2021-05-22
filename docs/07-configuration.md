@@ -1,23 +1,24 @@
 # Step 7: Deploy a Configuration
 
-- https://crossplane.github.io/docs/v1.2/getting-started/create-configuration.html
+Read the official documentation on [Crossplane configuration](https://crossplane.github.io/docs/v1.2/getting-started/create-configuration.html).
 
 ## Build your Configuration
 
 ```bash
-curl -OL https://raw.githubusercontent.com/crossplane/crossplane/release-1.2/docs/snippets/package/definition.yaml
-curl -OL https://raw.githubusercontent.com/crossplane/crossplane/release-1.2/docs/snippets/package/gcp/composition.yaml
-curl -OL https://raw.githubusercontent.com/crossplane/crossplane/release-1.2/docs/snippets/package/gcp/crossplane.yaml
-kubectl crossplane install configuration .
-kubectl crossplane build configuration .
-ls *.xpkg
+# Taken from https://github.com/crossplane/crossplane/tree/master/docs/snippets/package/gcp
+kubectl crossplane install configuration ./etc/configuration
+```
+
+```bash
+kubectl crossplane build configuration -f ./etc/configuration
+ls ./etc/configuration/*.xpkg
 ```
 
 ## Publish your Configuration
 
 ```bash
-REG=gcr.io/datalayer-dev-1
-kubectl crossplane push configuration ${REG}/getting-started-with-gcp:master
+REGISTRY=gcr.io/datalayer-dev-1
+kubectl crossplane push configuration ${REGISTRY}/getting-started-with-gcp:master
 ```
 
 ## Use your Configuration

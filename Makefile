@@ -156,15 +156,18 @@ crossplane-apply: # crossplane deploy.
 crossplane-status: # crossplane status.
 	kubectl get managed
 
-platform-xrd-install: # install platform ref.
+platform-install: # install platform ref.
 	kubectl apply -f ./etc/platform-ref-gcp/network
 	kubectl apply -f ./etc/platform-ref-gcp/cluster/services
 	kubectl apply -f ./etc/platform-ref-gcp/cluster/gke
 	kubectl apply -f ./etc/platform-ref-gcp/cluster
 
-platform-deploy: # deploy platform ref.
+platform-claim: # deploy platform ref.
 	kubectl apply -f ./etc/platform-ref-gcp/examples
 
+platform-destroy: # deploy platform ref.
+	kubectl delete -f ./etc/platform-ref-gcp/examples
+
 platform-kubeconfig: # get kubeconfig
-	echo $(kubectl get secret cluster-conn -n default -o jsonpath='{.data.kubeconfig}') | base64 --decode > kubeconfig
-	cat kubeconfig
+	@exec echo $(kubectl get secret cluster-conn -n default -o jsonpath='{.data.kubeconfig}') | base64 --decode > kubeconfig
+	@exec cat kubeconfig

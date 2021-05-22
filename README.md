@@ -10,13 +10,13 @@ You can read more context about Crossplane on the companion blog post [Crossplan
 
 > Ensure you have credits to spend on GCloud to run these examples.
 
-We have a first section with standard case like settting-up the environment, deploying managed and composite resources as helm chart... We also have a second section where we build our own application, a React.js user interface interacting with managed resources.
+We have a first section with standard case like settting-up the environment, deploying managed and composite resources as helm chart... We also have a second section where we build our own application, a React.js user interface interacting with a managed database.
 
-We are trying to stick to some nomenclature like:
+We are trying to stick to some defintions:
 
-- `Control cluster`: The K8S cluster that hosts the Crossplane operator, in our case a [Kind](https://kind.sigs.k8s.io) cluster.
-- `Managed resources`: The managed infrastructure like cluster, database, IAM roles... created by the Control Cluster and running in the cloud.
-- `Workload cluster`: The K8S managed clusters created by the Control Cluster and running in the cloud.
+- `Control cluster`: The Kubernetes cluster that hosts the Crossplane operator, in our case a [Kind](https://kind.sigs.k8s.io) cluster.
+- `Managed resources`: The managed infrastructure like Kubernetes clusters, databases, IAM roles... created by the Control cluster and running in the cloud.
+- `Workload cluster`: The Kubernetes managed clusters created by the Control cluster and running in the cloud.
 
 ## Standard Cases
 
@@ -44,6 +44,61 @@ How to [Troubleshoot](./docs/10-troubleshoot.md) if needed, hopefully not too mu
 
 ## Custom Web User Interface
 
-Build and deploy a UI to insert and view a list of records from a Postgresql table deployed on GCP. Follow [these instructions](./docs/custom-ui.md) to get the following UI in your browser.
+Build and deploy a UI to insert and view a list of rows from a Postgresql table deployed on GCP. Follow [these instructions](./docs/custom-ui.md) to get the following UI in your browser.
 
 <img src="./res/users.png" style="max-width: 800px"/>
+
+## Bare Minimum
+
+Assuming you have already setup a GCloud project with a service account and the Crossplanne CLI, the bare minimun to run is the following.
+
+```bash
+RAND=<YOUR-RANDOM-PROJECT-NUMBER>
+PROJECT_ID="crossplane-example-$RAND"
+SERVICE_ACCOUNT="example-$RAND@${PROJECT_ID}.iam.gserviceaccount.com"
+helm install crossplane \
+  --namespace crossplane-system \
+  crossplane-stable/crossplane \
+  --version 1.2.1 \
+  --create-namespace
+sleep 15
+#
+kubectl crossplane install provider crossplane/provider-gcp:master
+kubectl crossplane install provider crossplane/provider-helm:master
+sleep 60
+#
+KEY_FILE=crossplane-gcp-provider-key.json
+gcloud iam service-accounts keys create $KEY_FILE --project $PROJECT_ID --iam-account $SERVICE_ACCOUNT
+PROVIDER_SECRET_NAMESPACE=crossplane-system
+kubectl create secret generic gcp-creds -n $PROVIDER_SECRET_NAMESPACE --from-file=creds=$KEY_FILE
+rm $KEY_FILE
+#
+echo """
+apiVersion: gcp.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: default
+spec:
+  projectID: ${PROJECT_ID}
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: ${PROVIDER_SECRET_NAMESPACE}
+      name: gcp-creds
+      key: creds
+""" | kubectl create -f -
+echo """
+apiVersion: gcp.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: gcp-provider-config
+spec:
+  projectID: ${PROJECT_ID}
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: ${PROVIDER_SECRET_NAMESPACE}
+      name: gcp-creds
+      key: creds
+""" | kubectl create -f -
+```

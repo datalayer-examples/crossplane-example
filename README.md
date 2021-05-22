@@ -50,55 +50,41 @@ Build and deploy a UI to insert and view a list of rows from a Postgresql table 
 
 ## Bare Minimum Setup
 
-Assuming you have already setup a GCloud project with a service account and the Crossplanne CLI, the bare minimun to run is the following.
+Assuming you have already setup a Google Cloud project with a service account and the Crossplane CLI, the bare minimun to run is the following.
 
 ```bash
 RAND=<YOUR-RANDOM-PROJECT-NUMBER>
 PROJECT_ID="crossplane-example-$RAND"
 SERVICE_ACCOUNT="example-$RAND@${PROJECT_ID}.iam.gserviceaccount.com"
 helm install crossplane \
-  --namespace crossplane-system \
-  crossplane-stable/crossplane \
-  --version 1.2.1 \
-  --create-namespace
-sleep 15
-#
-kubectl crossplane install provider crossplane/provider-gcp:master
-kubectl crossplane install provider crossplane/provider-helm:master
-sleep 60
-#
-KEY_FILE=crossplane-gcp-provider-key.json
-gcloud iam service-accounts keys create $KEY_FILE --project $PROJECT_ID --iam-account $SERVICE_ACCOUNT
-PROVIDER_SECRET_NAMESPACE=crossplane-system
-kubectl create secret generic gcp-creds -n $PROVIDER_SECRET_NAMESPACE --from-file=creds=$KEY_FILE
-rm $KEY_FILE
-#
-echo """
-apiVersion: gcp.crossplane.io/v1beta1
-kind: ProviderConfig
-metadata:
-  name: default
-spec:
-  projectID: ${PROJECT_ID}
-  credentials:
-    source: Secret
-    secretRef:
-      namespace: ${PROVIDER_SECRET_NAMESPACE}
-      name: gcp-creds
-      key: creds
-""" | kubectl create -f -
-echo """
-apiVersion: gcp.crossplane.io/v1beta1
-kind: ProviderConfig
-metadata:
-  name: gcp-provider-config
-spec:
-  projectID: ${PROJECT_ID}
-  credentials:
-    source: Secret
-    secretRef:
-      namespace: ${PROVIDER_SECRET_NAMESPACE}
-      name: gcp-creds
-      key: creds
-""" | kubectl create -f -
+    --namespace crossplane-system \
+    crossplane-stable/crossplane \
+    --version 1.2.1 \
+    --create-namespace && \
+  sleep 15
+kubectl crossplane install provider crossplane/provider-gcp:master && \
+  kubectl crossplane install provider crossplane/provider-helm:master && \
+  sleep 60
+KEY_FILE=crossplane-gcp-provider-key.json && \
+  gcloud iam service-accounts keys create $KEY_FILE --project $PROJECT_ID --iam-account $SERVICE_ACCOUNT && \
+  kubectl create secret generic gcp-creds -n crossplane-system --from-file=creds=$KEY_FILE && \
+  rm $KEY_FILE
+function create_provider_config() {
+  echo """
+  apiVersion: gcp.crossplane.io/v1beta1
+  kind: ProviderConfig
+  metadata:
+    name: $1
+  spec:
+    projectID: ${PROJECT_ID}
+    credentials:
+      source: Secret
+      secretRef:
+        namespace: crossplane-system
+        name: gcp-creds
+        key: creds
+  """ | kubectl create -f -
+}
+create_provider_config default
+create_provider_config gcp-provider-config
 ```

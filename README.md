@@ -12,7 +12,7 @@ You can read more context about Crossplane on the companion blog post [Crossplan
 
 We have a first section with use case like settting-up the environment, deploying managed and composite resources as helm chart... We also have a second section where we build a custom React.js user interface interacting with a managed database.
 
-We are trying to stick to some defintions:
+We are trying to stick to some definitions:
 
 - `Control cluster`: The Kubernetes cluster that hosts the Crossplane operator, in our case a [Kind](https://kind.sigs.k8s.io) cluster.
 - `Managed resources`: The managed infrastructure like Kubernetes clusters, databases, IAM roles... created by the Control cluster and running in the cloud.

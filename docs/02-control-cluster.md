@@ -23,7 +23,7 @@ kubectl config use-context kind-$CONTROL_CLUSTER_NAME
 
 ```bash
 # ... or if you also need a local registry.
-./bin/create-kind.sh
+./sbin/create-kind.sh
 # Test the local registry.
 docker pull gcr.io/google-samples/hello-app:1.0
 docker tag gcr.io/google-samples/hello-app:1.0 localhost:5000/hello-app:1.0

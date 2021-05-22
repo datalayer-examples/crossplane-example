@@ -31,9 +31,9 @@ env-rm:
 env:
 	-conda env create -f environment.yml 
 	@echo
-	@echo -----------------------------------------------
-	@echo ✨  Crossplane Examples Environment is installed
-	@echo -----------------------------------------------
+	@echo ----------------------------------------------
+	@echo ✨  Crossplane Examples environment is created
+	@echo ----------------------------------------------
 	@echo
 
 install:

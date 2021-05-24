@@ -137,19 +137,19 @@ helm-build: # helm build.
 helm-clean: # helm clean.
 	rm crossplane-examples-${VERSION}.tgz
 
+helm-install-local: ## install helm chart locally.
+	helm upgrade \
+		--install crossplane-examples \
+		./etc/helm-chart \
+		--create-namespace \
+		--namespace crossplane-examples
+	make helm-status
+
 helm-install: ## install helm chart.
 	helm upgrade \
 		--install crossplane-examples \
 		datalayer/crossplane-examples \
 		--version ${VERSION} \
-		--create-namespace \
-		--namespace crossplane-examples
-	make helm-status
-
-helm-install-local: ## install helm chart locally.
-	helm upgrade \
-		--install crossplane-examples \
-		./etc/helm-chart \
 		--create-namespace \
 		--namespace crossplane-examples
 	make helm-status
@@ -166,8 +166,11 @@ port-forward: # port forward.
 	echo open http://localhost:30000
 	kubectl port-forward service/crossplane-examples-service 30000:8765 -n crossplane-examples
 
-crossplane-apply: # crossplane deploy.
-	kubectl apply -f ./etc/managed
+gke-example-create: # create a gke cluster example.
+	kubectl apply -f ./etc/managed/gke.yaml
+
+gke-example-rm: # delete the gke cluster example.
+	kubectl delete -f ./etc/managed/gke.yaml
 
 crossplane-status: # crossplane status.
 	kubectl get managed

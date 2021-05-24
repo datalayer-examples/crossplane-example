@@ -1,0 +1,30 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: exampleclusters.example.crossplane.io
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: example.crossplane.io
+  names:
+    kind: ExampleCluster
+    listKind: ExampleClusterList
+    plural: exampleclusters
+    singular: examplecluster
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A ExampleCluster is a composite resource that represents a K8S Cluster with Example Installed
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                clusterVersion:
+                  type: string
+                  description: GKE cluster version
+              required:
+                - clusterVersion

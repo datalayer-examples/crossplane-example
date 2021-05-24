@@ -33,16 +33,6 @@ The UI allows you to insert and view a list of simple records from the Postgresq
 
 The server endpoints connect to a Postgresql database. The database connection details are expected to be provided via environment variables.
 
-```python
-conn = psycopg2.connect(
-    host=os.environ['DB_HOST'],
-    port=os.environ['DB_PORT'],
-    user=os.environ['DB_USERNAME'],
-    password=os.environ['DB_PASSWORD'],
-    database="crossplane_examples",
-    )
-```
-
 ## Test with a local database
 
 You need a running Postgresql database with a role, e.g. `datalayer`.
@@ -56,14 +46,15 @@ createdb crossplane_examples
 createuser --interactive --pwprompt
 ```
 
-```sql
--- Create the USERS table.
+```bash
+# Create the USERS table.
 psql -c "CREATE TABLE USERS(ID SERIAL, FIRST_NAME TEXT NOT NULL, LAST_NAME TEXT NOT NULL);" -d crossplane_examples
--- Grant the USERS table.
+# Grant the USERS table.
 psql -c "GRANT ALL PRIVILEGES ON DATABASE USERS TO datalayer;" -d crossplane_examples
--- Add dummy data.
+# Test dummy data insertion.
 psql -c "INSERT INTO USERS(first_name, last_name) VALUES('Charlie', 'Brown');" -d crossplane_examples
 psql -c "SELECT * FROM USERS;" -d crossplane_examples
+psql -c "DELETE FROM USERS;" -d crossplane_examples
 ```
 
 ```bash
@@ -72,11 +63,14 @@ echo """export DB_HOST=localhost
 export DB_PORT=5432
 export DB_USERNAME=datalayer
 export DB_PASSWORD=datalayer""" > .env
+```
+
+```bash
 # Source that .env file in your shell environment.
 source .env
 ```
 
-You are now ready to run the application on your local environement.
+You are now ready to run the application on your local environment.
 
 ```bash
 # open http://localhost:3003 # The Webpack server.
@@ -108,8 +102,9 @@ watch make helm-status
 echo open http://localhost:8001/api/v1/namespaces/crossplane-examples/services/http:crossplane-examples-service:8765/proxy/
 kubectl proxy
 # Connect with a port-forwrd.
-open http://localhost:30000
+echo open http://localhost:30000
 make port-forward
+# Connect via the node port.
 # 🚧 The nodeport does not work yet...
 open http://localhost:30000
 ```
@@ -122,8 +117,8 @@ make helm-rm
 ## 🚧 Run on a Workload cluster
 
 ```bash
-# 🚧 TBD
-make crossplane-apply
+# 🚧 Create a GKE workload Cluster
+make gke-example-create # create a gke cluster example.
 make crossplane-status
 ```
 
@@ -136,8 +131,6 @@ make helm-install
 # Connect with a proxy.
 echo open http://localhost:8001/api/v1/namespaces/crossplane-examples/services/http:crossplane-examples-service:8765/proxy/
 kubectl proxy
-# 🚧 The following does not work yet...
-open http://localhost:30000
 ```
 
 ```bash
@@ -151,6 +144,7 @@ PGPASSWORD=$DB_PASSWORD psql "dbname=crossplane_examples user=$DB_USERNAME hosta
 ```
 
 ```bash
-# Uninstall the helm chart.
+# Terminate the resources.
 make helm-rm
+make gke-example-rm # delete the gke cluster example.
 ```

@@ -168,7 +168,7 @@ PGPASSWORD=$DB_PASSWORD psql "sslmode=disable dbname=example user=$DB_USERNAME h
 ```
 
 ```bash
-# Run JupyterHub with the database.
+# Run jupyterhub with the database.
 # export JPY_PSQL_PASSWORD=jupyterhub
 # PGPASSWORD=$DB_PASSWORD psql "sslmode=disable dbname=postgres user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
 # CREATE DATABASE jupyterhub;
@@ -187,7 +187,7 @@ SELECT * FROM servers;
 ```
 
 ```bash
-# Consume the database from a Pod.
+# Consume the database from a pod.
 echo """
 apiVersion: v1
 kind: Pod

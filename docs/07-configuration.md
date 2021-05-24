@@ -1,6 +1,6 @@
 # Step 7: Deploy a Configuration
 
-Read the official documentation on [Crossplane configuration](https://crossplane.github.io/docs/v1.2/getting-started/create-configuration.html).
+Read the official documentation about `Configuration`on thed [Crossplane documentation website](https://crossplane.github.io/docs/v1.2/getting-started/create-configuration.html).
 
 ## Build your Configuration
 
@@ -21,7 +21,7 @@ REGISTRY=gcr.io/datalayer-dev-1
 kubectl crossplane push configuration ${REGISTRY}/getting-started-with-gcp:master
 ```
 
-## Use your Configuration
+## Use a Configuration
 
 ```bash
 # https://cloud.upbound.io/registry/upbound/platform-ref-gcp
@@ -36,6 +36,6 @@ watch kubectl get pkg
 watch kubectl get providers
 kubectl get crd | grep database
 kubectl get crd | grep postgresql
-## Install GC configuration.
+## Install the getting started with gcp configuration.
 kubectl crossplane install configuration gcr.io/datalayer-dev-1/getting-started-with-gcp:master
 ```

@@ -1,0 +1,120 @@
+apiVersion: compute.gcp.crossplane.io/v1beta1
+kind: Network
+metadata:
+  name: gke-test
+spec:
+  forProvider:
+    autoCreateSubnetworks: false
+    routingConfig:
+      routingMode: REGIONAL
+#  reclaimPolicy: Delete
+  providerConfigRef:
+    name: gcp-provider-config
+---
+apiVersion: compute.gcp.crossplane.io/v1beta1
+kind: Subnetwork
+metadata:
+  name: gke-test-subnetwork
+spec:
+  forProvider:
+    region: us-central1
+    ipCidrRange: "192.168.0.0/24"
+    privateIpGoogleAccess: true
+    secondaryIpRanges:
+      - rangeName: pods
+        ipCidrRange: 10.128.0.0/20
+      - rangeName: services
+        ipCidrRange: 172.16.0.0/16
+    networkRef:
+      name: gke-test
+#  reclaimPolicy: Delete
+  providerConfigRef:
+    name: gcp-provider-config
+---
+apiVersion: container.gcp.crossplane.io/v1beta1
+kind: GKECluster
+metadata:
+  name: crossplane-examples
+spec:
+  providerConfigRef:
+    name: gcp-provider-config
+  writeConnectionSecretToRef:
+    name: crossplane-examples-conn
+    namespace: crossplane-system
+  forProvider:
+    initialClusterVersion: "1.18"
+    network: "gke-test"
+    location: us-central1-a
+    masterAuth:
+      username: admin
+      clientCertificateConfig:
+        issueClientCertificate: true
+    binaryAuthorization:
+      enabled: false
+    ipAllocationPolicy:
+      useIpAliases: true
+      createSubnetwork: true
+    legacyAbac:
+      enabled: false
+    loggingService: "logging.googleapis.com/kubernetes"
+    monitoringService: "monitoring.googleapis.com/kubernetes"
+    networkPolicy:
+      enabled: false
+#      provider: CALICO
+    podSecurityPolicyConfig:
+      enabled: false
+    addonsConfig:
+      cloudRunConfig:
+        disabled: true
+      dnsCacheConfig:
+        enabled: false
+      gcePersistentDiskCsiDriverConfig:
+        enabled: true
+      horizontalPodAutoscaling:
+        disabled: true
+      httpLoadBalancing:
+        disabled: true
+      istioConfig:
+        disabled: true
+#        auth: "AUTH_NONE"
+      kalmConfig:
+        enabled: false
+      kubernetesDashboard:
+        disabled: true
+      networkPolicyConfig:
+        disabled: true
+---
+apiVersion: container.gcp.crossplane.io/v1alpha1
+kind: NodePool
+metadata:
+  name: crossplane-examples-np
+spec:
+  providerConfigRef:
+    name: gcp-provider-config
+  forProvider:
+    clusterRef:
+      name: crossplane-examples
+    initialNodeCount: 3
+    locations:
+      - "us-central1-a"
+    autoscaling:
+      autoprovisioned: false
+      enabled: true
+      maxNodeCount: 5
+      minNodeCount: 3  
+    config:
+      machineType: n1-standard-1
+      diskSizeGb: 12
+      diskType: pd-ssd
+      imageType: cos_containerd
+      labels:
+        test-label: crossplane-created
+#      sandboxConfig:
+#        sandboxType: gvisor
+      oauthScopes:
+      - "https://www.googleapis.com/auth/devstorage.read_only"
+      - "https://www.googleapis.com/auth/logging.write"
+      - "https://www.googleapis.com/auth/monitoring"
+      - "https://www.googleapis.com/auth/servicecontrol"
+      - "https://www.googleapis.com/auth/service.management.readonly"
+      - "https://www.googleapis.com/auth/trace.append"

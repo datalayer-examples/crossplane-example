@@ -17,6 +17,7 @@ kubectl apply -f ./etc/wordpress-cluster/claim
 Get the status of the Wordpress cluster.
 
 ```bash
+watch kubectl get managed
 kubectl get gkecluster
 kubectl get cloudsqlinstances
 kubectl get helm

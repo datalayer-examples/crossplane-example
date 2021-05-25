@@ -11,7 +11,7 @@ You need the following tools on your local environment.
 - [Conda](https://docs.conda.io/en/latest/miniconda.html).
 - [Kubectl](https://kubernetes.io/docs/tasks/tools).
 - [Helm](https://helm.sh).
-- A running [postgresql](https://www.postgresql.org) server if you want to test the UI locally.
+- [Postgresql](https://www.postgresql.org) server if you want to test the UI locally.
 
 ## Environment
 
@@ -22,15 +22,20 @@ conda deactivate && \
 # Create your conda environment.
 make env && \
   conda activate crossplane-examples
-# Install the node and python dependencies and be ready to rock the dev.
-make install
 ```
 
-## The application
+## Build the application
 
 You are going to build a [react.js web application](./../src) connecting to a [python server](./../crossplane_examples) REST endpoints.
 
 The UI allows you to insert and view a list of simple records from the [postgresql](https://www.postgresql.org) database. The server endpoints connect to a postgresql database. The database connection details are expected to be provided via environment variables.
+
+```bash
+# Install the node and python dependencies and be ready to rock the dev.
+make install
+# Build the application.
+make build
+```
 
 ## Test with a local database
 
@@ -112,12 +117,13 @@ make docker-push-local
 ```
 
 ```bash
-# Install the helm chart.
+# Install the helm chart on the local control cluster.
 make helm-install-local
 watch make helm-status
 ```
 
 ```bash
+# Browser the UI.
 # Option 1 - Connect with a proxy.
 echo open http://localhost:8001/api/v1/namespaces/crossplane-examples/services/http:crossplane-examples-service:8765/proxy/
 kubectl proxy

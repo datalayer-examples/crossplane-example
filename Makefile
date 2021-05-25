@@ -43,7 +43,6 @@ install:
 
 build:
 	($(CONDA_ACTIVATE) crossplane-examples; \
-		python setup.py sdist bdist_egg bdist_wheel && \
 		yarn build )
 
 publish:

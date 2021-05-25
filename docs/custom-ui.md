@@ -11,29 +11,30 @@ You need the following tools on your local environment.
 - [Conda](https://docs.conda.io/en/latest/miniconda.html).
 - [Kubectl](https://kubernetes.io/docs/tasks/tools).
 - [Helm](https://helm.sh).
-- Optionally, a running [Postgresql](https://www.postgresql.org) server if you want to test the UI locally.
+- A running [postgresql](https://www.postgresql.org) server if you want to test the UI locally.
 
 ## Environment
 
 ```bash
-# Remove the existing environement if you want to start from zero.
+# Remove the existing environment if you want to start from zero.
 conda deactivate && \
   make env-rm
 # Create your conda environment.
-make env
+make env && \
+  conda activate crossplane-examples
 # Install the node and python dependencies and be ready to rock the dev.
 make install
 ```
 
-## Build the application
+## The application
 
-You are going to build a [React.js web application](./../src) backed by a [python server](./../crossplane_examples) exposing REST endpoints.
+You are going to build a [react.js web application](./../src) connecting to a [python server](./../crossplane_examples) REST endpoints.
 
-The UI allows you to insert and view a list of simple records from the Postgresql database. The server endpoints connect to a Postgresql database. The database connection details are expected to be provided via environment variables.
+The UI allows you to insert and view a list of simple records from the [postgresql](https://www.postgresql.org) database. The server endpoints connect to a postgresql database. The database connection details are expected to be provided via environment variables.
 
 ## Test with a local database
 
-You need a running Postgresql database with a role, e.g. `datalayer`.
+You need a running postgresql database with a role, e.g. `datalayer`.
 
 !!! You will need a user with the same name as the chosen role on your operating system...
 
@@ -50,7 +51,7 @@ psql -c "CREATE TABLE USERS(ID SERIAL, FIRST_NAME TEXT NOT NULL, LAST_NAME TEXT 
 # Grant the USERS table.
 psql -c "GRANT ALL PRIVILEGES ON DATABASE USERS TO datalayer;" -d crossplane_examples
 # Test dummy data insertion.
-psql -c "INSERT INTO USERS(first_name, last_name) VALUES('Charlie', 'Brown');" -d crossplane_examples
+psql -c "INSERT INTO USERS (first_name, last_name) VALUES ('Charlie', 'Brown');" -d crossplane_examples
 psql -c "SELECT * FROM USERS;" -d crossplane_examples
 psql -c "DELETE FROM USERS;" -d crossplane_examples
 ```
@@ -72,8 +73,8 @@ printenv | grep "DB_"
 You are now ready to run the application on your local environment.
 
 ```bash
-# open http://localhost:3003 # The Webpack server.
-# open http://localhost:8765 # The Python server.
+echo open http://localhost:3003 # The Webpack server.
+echo open http://localhost:8765 # The Python server.
 make start
 ```
 
@@ -82,12 +83,8 @@ make start
 To run on a Kubernetes cluster, you need a docker image.
 
 ```bash
-# Build a local docker image and push it to your registry.
+# Build the docker image.
 make docker-build
-# Push to local registry.
-make docker-push-local
-# Push to your registry.
-REGISTRY=<YOUR_REGISTRY> make docker-push-registry
 ```
 
 ```bash
@@ -110,7 +107,12 @@ make docker-rm
 ## Run on the Control cluster
 
 ```bash
-# Install the Helm chart.
+# Push the docker image to local registry.
+make docker-push-local
+```
+
+```bash
+# Install the helm chart.
 make helm-install-local
 watch make helm-status
 ```
@@ -119,7 +121,7 @@ watch make helm-status
 # Option 1 - Connect with a proxy.
 echo open http://localhost:8001/api/v1/namespaces/crossplane-examples/services/http:crossplane-examples-service:8765/proxy/
 kubectl proxy
-# Option 2 - Connect with a port-forwrd.
+# Option 2 - Connect with port-forward.
 echo open http://localhost:30000
 make port-forward
 # 🚧 Option 3 - Connect via the node port - The nodeport does not work yet...
@@ -132,6 +134,11 @@ make helm-rm
 ```
 
 ## 🚧 Run on a Workload cluster
+
+```bash
+# Push the docker image to your registry.
+REGISTRY=<YOUR_REGISTRY> make docker-push-registry
+```
 
 ```bash
 # 🚧 Create a GKE workload Cluster

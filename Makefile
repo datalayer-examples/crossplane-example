@@ -26,7 +26,7 @@ clean:
 	find . -name '__pycache__' -exec rm -fr {} +
 
 env-rm:
-	-conda remove --all -n crossplane-examples
+	-conda remove -y --all -n crossplane-examples
 
 env:
 	-conda env create -f environment.yml 

@@ -50,8 +50,8 @@ Build and deploy a UI to insert and view a list of rows from a Postgresql table 
 
 ## Bare Minimum Setup
 
-Assuming you have already setup a Google Cloud project with a service account and the Crossplane CLI, the bare minimun to run is the following.
+Assuming you have a [created a GCloud project](./docs/01-gcloud-project.md) and [created a Control cluster](./docs/02-control-cluster.md), the bare minimun to run is the following.
 
 ```bash
-./sbin/crossplane-min.sh <YOUR-RANDOM-PROJECT-NUMBER>
+./sbin/crossplane-gcp-min.sh <YOUR_RANDOM_PROJECT_NUMBER>
 ```

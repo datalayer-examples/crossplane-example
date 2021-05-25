@@ -1,12 +1,16 @@
 # Step 8: Deploy a Wordpress Cluster
 
-Define your Wordpress cluster configuration composed of a GKE cluster, a database and a Helm chart.
+## Define
+
+Define your Wordpress cluster configuration composed of a GKE cluster, a database and a Wordpress Helm chart.
 
 ```bash
 # Taken from https://github.com/crossplane-contrib/provider-helm/tree/master/examples/in-composition
 kubectl apply -f ./etc/wordpress-cluster/config
 kubectl get xrd | grep wordpressclusters
 ```
+
+## Claim
 
 Claim a Wordpress cluster.
 
@@ -25,9 +29,13 @@ kubectl get wordpressclusters
 kubectl describe wordpressclusters
 ```
 
+## Terminate
+
 ```bash
-kubectl get gkecluster
+kubectl delete -f ./etc/wordpress-cluster/claim
 ```
+
+## Build
 
 Once you are confident with your configuration, build, publish and use it as a package.
 
@@ -35,7 +43,7 @@ Once you are confident with your configuration, build, publish and use it as a p
 cd ./etc/wordpress-cluster/config && \
   kubectl crossplane build configuration
 ls *.xpkg
-REG=...
+REG=<YOUR_REGISTRY>
 kubectl crossplane push configuration ${REG}/wordpresscluster:master
 kubectl crossplane install configuration ${REG}/wordpresscluster:master
 watch kubectl get configuration

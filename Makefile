@@ -38,11 +38,6 @@ env:
 
 install:
 	($(CONDA_ACTIVATE) crossplane-examples; \
-		python setup.py install && \
-		yarn install )
-
-dev:
-	($(CONDA_ACTIVATE) crossplane-examples; \
 		pip install -e . && \
 		yarn install )
 
@@ -89,14 +84,14 @@ docker-build: ## build the image.
 	  -f Dockerfile \
 	  .
 
+docker-push-local: ## push the image.
+	docker push \
+	  localhost:5000/crossplane-examples:${VERSION}
+
 docker-tag: ## push the image.
 	docker tag \
 	  localhost:5000/crossplane-examples:${VERSION} \
 	  ${REGISTRY}/crossplane-examples:${VERSION}
-
-docker-push-local: ## push the image.
-	docker push \
-	  localhost:5000/crossplane-examples:${VERSION}
 
 docker-push-registry: docker-tag ## push the image.
 	docker push \
@@ -109,7 +104,7 @@ docker-start: ## start the container.
 	  -it \
 	  -d \
 	  --rm \
-	  --env-file ./.env \
+	  --env-file ./.docker-env \
 	  --name crossplane-examples \
 	  -p 8765:8765 \
 	  localhost:5000/crossplane-examples:${VERSION}

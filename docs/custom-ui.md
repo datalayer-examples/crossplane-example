@@ -22,16 +22,14 @@ conda deactivate && \
 # Create your conda environment.
 make env
 # Install the node and python dependencies and be ready to rock the dev.
-make dev
+make install
 ```
 
 ## Build the application
 
 You are going to build a [React.js web application](./../src) backed by a [python server](./../crossplane_examples) exposing REST endpoints.
 
-The UI allows you to insert and view a list of simple records from the Postgresql database.
-
-The server endpoints connect to a Postgresql database. The database connection details are expected to be provided via environment variables.
+The UI allows you to insert and view a list of simple records from the Postgresql database. The server endpoints connect to a Postgresql database. The database connection details are expected to be provided via environment variables.
 
 ## Test with a local database
 
@@ -68,6 +66,7 @@ export DB_PASSWORD=datalayer""" > .env
 ```bash
 # Source that .env file in your shell environment.
 source .env
+printenv | grep "DB_"
 ```
 
 You are now ready to run the application on your local environment.
@@ -78,7 +77,9 @@ You are now ready to run the application on your local environment.
 make start
 ```
 
-## Prepare the Docker image
+## Docker image
+
+To run on a Kubernetes cluster, you need a docker image.
 
 ```bash
 # Build a local docker image and push it to your registry.
@@ -87,6 +88,23 @@ make docker-build
 make docker-push-local
 # Push to your registry.
 REGISTRY=<YOUR_REGISTRY> make docker-push-registry
+```
+
+```bash
+# Save your database connection details in a .env file.
+echo """DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=datalayer
+DB_PASSWORD=datalayer
+DB_LOCAL_START=true""" > .docker-env
+```
+
+```bash
+# Start a local docker container.
+echo open http://localhost:8765
+make docker-start
+# Stop the local docker container
+make docker-rm
 ```
 
 ## Run on the Control cluster
@@ -98,14 +116,13 @@ watch make helm-status
 ```
 
 ```bash
-# Connect with a proxy.
+# Option 1 - Connect with a proxy.
 echo open http://localhost:8001/api/v1/namespaces/crossplane-examples/services/http:crossplane-examples-service:8765/proxy/
 kubectl proxy
-# Connect with a port-forwrd.
+# Option 2 - Connect with a port-forwrd.
 echo open http://localhost:30000
 make port-forward
-# Connect via the node port.
-# 🚧 The nodeport does not work yet...
+# 🚧 Option 3 - Connect via the node port - The nodeport does not work yet...
 open http://localhost:30000
 ```
 

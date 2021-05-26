@@ -140,7 +140,7 @@ open http://localhost:30000
 make helm-rm
 ```
 
-## 🚧 Run on a Workload cluster
+## Run on a Workload cluster
 
 ```bash
 # Push the docker image to your registry.

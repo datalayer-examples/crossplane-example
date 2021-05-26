@@ -24,6 +24,8 @@ kubectl crossplane install provider crossplane/provider-gcp:master && \
   kubectl crossplane install provider crossplane/provider-sql:master && \
   sleep 60
 
+kubectl get providers
+
 echo
 echo ❇️ Creating the CGP Credentials
 echo

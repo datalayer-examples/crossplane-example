@@ -183,7 +183,7 @@ spec:
                 fmt: "%s-exampleui-postgresql"
 
     # SQL Database, Role and Grant
-    ############################
+    ###############################
 
     - base:
         apiVersion: postgresql.sql.crossplane.io/v1alpha1
@@ -202,7 +202,8 @@ spec:
         apiVersion: postgresql.sql.crossplane.io/v1alpha1
         kind: Role
         metadata:
-          name: crossplane-example-role
+          annotations:
+            crossplane.io/external-name: crossplane-example-role
         spec:
           forProvider:
             privileges:
@@ -212,6 +213,8 @@ spec:
             name: crossplane-example-role-secret
             namespace: crossplane-system
       patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.name
         - fromFieldPath: metadata.name
           toFieldPath: spec.providerConfigRef.name
     - base:
@@ -225,14 +228,18 @@ spec:
               - CREATE
             withOption: GRANT
             roleRef:
-              name: crossplane-example-role
+              name: 
             databaseRef:
               name: 
       patches:
         - fromFieldPath: metadata.name
-          toFieldPath: spec.forProvider.databaseRef.name
+          toFieldPath: metadata.name
         - fromFieldPath: metadata.name
           toFieldPath: spec.providerConfigRef.name
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.roleRef.name
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.databaseRef.name
 
     # Helm Provider Config
     ############################

@@ -111,11 +111,11 @@ kubectl describe database.postgresql.sql.crossplane.io/crossplane-examples
 
 ```bash
 # Connect to the database https://cloud.google.com/sql/docs/postgstatic/images/connect-admin-ip
-export DB_ENDPOINT=$(kubectl get secret db-conn -n crossplane-examples  -o jsonpath='{.data.endpoint}' | base64 --decode)
-# export DB_PORT=$(kubectl get secret db-conn -n crossplane-examples  -o jsonpath='{.data.port}' | base64 --decode)
+export DB_ENDPOINT=$(kubectl get secret db-conn -n crossplane-examples -o jsonpath='{.data.endpoint}' | base64 --decode)
+# export DB_PORT=$(kubectl get secret db-conn -n crossplane-examples -o jsonpath='{.data.port}' | base64 --decode)
 export DB_PORT=5432
-export DB_USERNAME=$(kubectl get secret db-conn -n crossplane-examples  -o jsonpath='{.data.username}' | base64 --decode)
-export DB_PASSWORD=$(kubectl get secret db-conn -n crossplane-examples  -o jsonpath='{.data.password}' | base64 --decode)
+export DB_USERNAME=$(kubectl get secret db-conn -n crossplane-examples -o jsonpath='{.data.username}' | base64 --decode)
+export DB_PASSWORD=$(kubectl get secret db-conn -n crossplane-examples -o jsonpath='{.data.password}' | base64 --decode)
 export JPY_PSQL_PASSWORD=jupyterhub
 PGPASSWORD=$DB_PASSWORD psql "sslmode=disable dbname=postgres user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
 \l

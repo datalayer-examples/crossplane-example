@@ -1,17 +1,20 @@
-# Step 7: Deploy a Configuration
+# 🚧 Step 6: Deploy a Configuration
 
-Read the official documentation about `Configuration`on thed [Crossplane documentation website](https://crossplane.github.io/docs/v1.2/getting-started/create-configuration.html).
+Read the official documentation about `Configuration`on the [Crossplane documentation website](https://crossplane.github.io/docs/v1.2/getting-started/create-configuration.html).
 
 ## Build your Configuration
 
 ```bash
 # Taken from https://github.com/crossplane/crossplane/tree/master/docs/snippets/package/gcp
-kubectl crossplane install configuration ./etc/configuration
+kubectl crossplane build configuration -f ./etc/configuration/getting-started
+ls ./etc/configuration/getting-started/*.xpkg
 ```
 
 ```bash
-kubectl crossplane build configuration -f ./etc/configuration
-ls ./etc/configuration/*.xpkg
+# 🚧 Failing with cannot unpack package: failed to fetch package digest from remote: Get "https://./v2/": dial tcp: lookup .: no such host
+kubectl crossplane install configuration ./etc/configuration/getting-started/getting-started-with-gcp-31f1c8fc4c54.xpgk
+kubectl get configuration
+kubectl describe configuration
 ```
 
 ## Publish your Configuration

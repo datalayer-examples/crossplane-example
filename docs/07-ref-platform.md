@@ -1,17 +1,17 @@
-# Step 6: Deploy a Reference Platform
+# Step 7: Deploy a Reference Platform
 
 ## Define the platform
 
 ```bash
 # kubectl crossplane install configuration registry.upbound.io/upbound/platform-ref-multi-k8s:v0.0.4
-make platform-install
+make platform-ref-install
 kubectl get xrd
 ```
 
 ## Claim a platform
 
 ```bash
-make platform-claim
+make platform-ref-claim
 kubectl get pkg
 kubectl describe configurationrevision
 kubectl get managed
@@ -21,7 +21,7 @@ kubectl get secrets -n crossplane-system | grep gkecluster
 ```
 
 ```bash
-make platform-destroy
+make platform-ref-destroy
 ```
 
 ## Claim a platform (step by step)

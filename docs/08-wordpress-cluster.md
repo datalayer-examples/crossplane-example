@@ -6,7 +6,7 @@ Define your Wordpress cluster configuration composed of a GKE cluster, a databas
 
 ```bash
 # Taken from https://github.com/crossplane-contrib/provider-helm/tree/master/examples/in-composition
-kubectl apply -f ./etc/wordpress-cluster/config
+kubectl apply -f ./etc/configuration/wordpress-cluster/config
 kubectl get xrd | grep wordpressclusters
 ```
 
@@ -15,13 +15,14 @@ kubectl get xrd | grep wordpressclusters
 Claim a Wordpress cluster.
 
 ```bash
-kubectl apply -f ./etc/wordpress-cluster/claim
+kubectl apply -f ./etc/configuration/wordpress-cluster/claim
 ```
 
 Get the status of the Wordpress cluster.
 
 ```bash
 watch kubectl get managed
+kubectl get networks
 kubectl get gkecluster
 kubectl get cloudsqlinstances
 kubectl get helm
@@ -32,7 +33,7 @@ kubectl describe wordpressclusters
 ## Terminate
 
 ```bash
-kubectl delete -f ./etc/wordpress-cluster/claim
+kubectl delete -f ./etc/configuration/wordpress-cluster/claim
 ```
 
 ## Build

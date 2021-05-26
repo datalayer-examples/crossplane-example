@@ -21,6 +21,7 @@ all: clean install build dist ## Clean, install and build.
 clean:
 	rm -fr build
 	rm -fr dist
+	rm kubeconfig
 	rm -fr *.egg-info
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '__pycache__' -exec rm -fr {} +
@@ -59,17 +60,17 @@ start:
 	($(CONDA_ACTIVATE) crossplane-examples; \
 		yarn start )
 
-platform-install: # install platform ref.
-	kubectl apply -f ./etc/platform-ref-gcp/network
-	kubectl apply -f ./etc/platform-ref-gcp/cluster/services
-	kubectl apply -f ./etc/platform-ref-gcp/cluster/gke
-	kubectl apply -f ./etc/platform-ref-gcp/cluster
+platform-ref-install: # install platform ref.
+	kubectl apply -f ./etc/configuration/platform-ref-gcp/network
+	kubectl apply -f ./etc/configuration/platform-ref-gcp/cluster/services
+	kubectl apply -f ./etc/configuration/platform-ref-gcp/cluster/gke
+	kubectl apply -f ./etc/configuration/platform-ref-gcp/cluster
 
-platform-claim: # deploy platform ref.
-	kubectl apply -f ./etc/platform-ref-gcp/examples
+platform-ref-claim: # deploy platform ref.
+	kubectl apply -f ./etc/configuration/platform-ref-gcp/examples
 
-platform-destroy: # deploy platform ref.
-	kubectl delete -f ./etc/platform-ref-gcp/examples
+platform-ref-destroy: # deploy platform ref.
+	kubectl delete -f ./etc/configuration/platform-ref-gcp/examples
 
 platform-kubeconfig: # get kubeconfig
 	@exec echo $(kubectl get secret cluster-conn -n default -o jsonpath='{.data.kubeconfig}') | base64 --decode > kubeconfig
@@ -96,17 +97,20 @@ docker-push-registry: docker-tag ## push the image.
 	docker push \
 	  ${REGISTRY}/crossplane-examples:${VERSION}
 
+#	  --rm
 docker-start: ## start the container.
 	echo open http://localhost:8765
 	echo open http://localhost:8765/api/crossplane
 	docker run \
 	  -it \
 	  -d \
-	  --rm \
 	  --env-file ./.docker-env \
 	  --name crossplane-examples \
 	  -p 8765:8765 \
 	  localhost:5000/crossplane-examples:${VERSION}
+
+docker-logs: ## get logs of the container.
+	docker logs crossplan-examples
 
 docker-connect: ## connect to the container.
 	docker exec -it crossplane-examples bash

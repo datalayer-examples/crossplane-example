@@ -60,13 +60,13 @@ spec:
           - value: \"0.0.0.0/0\"
   writeConnectionSecretToRef:
     namespace: crossplane-examples
-    name: db-conn-secret
+    name: db-conn
 """ | kubectl create -f -
 kubectl get managed
 kubectl get cloudsqlinstances
 kubectl get cloudsqlinstance crossplane-example-db
-kubectl describe secret db-conn-secret -n crossplane-examples
-kubectl get secret db-conn-secret -n crossplane-examples -o jsonpath='{.data.endpoint}' | base64 --decode
+kubectl describe secret db-conn -n crossplane-examples
+kubectl get secret db-conn -n crossplane-examples -o jsonpath='{.data.endpoint}' | base64 --decode
 open https://console.cloud.google.com/sql/instances/crossplane-example-db-1?project=$PROJECT_ID
 kubectl delete cloudsqlinstance crossplane-example-db-1
 ```
@@ -104,77 +104,32 @@ open https://console.cloud.google.com/sql/instances?project=$PROJECT_ID
 kubectl crossplane install provider crossplane/provider-sql:master
 kubectl get providers
 k describe providers crossplane-provider-sql
-echo """
-apiVersion: postgresql.sql.crossplane.io/v1alpha1
-kind: ProviderConfig
-metadata:
-  name: default
-spec:
-  credentials:
-    source: PostgreSQLConnectionSecret
-    connectionSecretRef:
-      namespace: default
-      name: db-conn
----
-apiVersion: postgresql.sql.crossplane.io/v1alpha1
-kind: Database
-metadata:
-  name: jupyterhub
-spec:
-  forProvider: {}
----
-apiVersion: postgresql.sql.crossplane.io/v1alpha1
-kind: Role
-metadata:
-  name: example-role
-spec:
-  forProvider:
-    privileges:
-      createDb: true
-      login: true
-  writeConnectionSecretToRef:
-    name: example-role-secret
-    namespace: default
----
-apiVersion: postgresql.sql.crossplane.io/v1alpha1
-kind: Grant
-metadata:
-  name: example-grant-role-1-on-database
-spec:
-  forProvider:
-    privileges:
-      - CREATE
-    withOption: GRANT
-    roleRef:
-      name: example-role
-    databaseRef:
-      name: example
-""" | kubectl create -f -
-kubectl describe database.postgresql.sql.crossplane.io/example 
+kubectl create -f ./etc/managed/sql.yaml
+kubectl get sql
+kubectl describe database.postgresql.sql.crossplane.io/crossplane-examples 
 ```
 
 ```bash
 # Connect to the database https://cloud.google.com/sql/docs/postgstatic/images/connect-admin-ip
-export DB_ENDPOINT=$(kubectl get secret db-conn -n default -o jsonpath='{.data.endpoint}' | base64 --decode)
-export DB_PORT=$(kubectl get secret db-conn -n default -o jsonpath='{.data.port}' | base64 --decode)
-export DB_USERNAME=$(kubectl get secret db-conn -n default -o jsonpath='{.data.username}' | base64 --decode)
-export DB_PASSWORD=$(kubectl get secret db-conn -n default -o jsonpath='{.data.password}' | base64 --decode)
+export DB_ENDPOINT=$(kubectl get secret db-conn -n crossplane-examples  -o jsonpath='{.data.endpoint}' | base64 --decode)
+# export DB_PORT=$(kubectl get secret db-conn -n crossplane-examples  -o jsonpath='{.data.port}' | base64 --decode)
+export DB_PORT=5432
+export DB_USERNAME=$(kubectl get secret db-conn -n crossplane-examples  -o jsonpath='{.data.username}' | base64 --decode)
+export DB_PASSWORD=$(kubectl get secret db-conn -n crossplane-examples  -o jsonpath='{.data.password}' | base64 --decode)
+export JPY_PSQL_PASSWORD=jupyterhub
 PGPASSWORD=$DB_PASSWORD psql "sslmode=disable dbname=postgres user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
 \l
+CREATE DATABASE jupyterhub;
+CREATE USER jupyterhub WITH ENCRYPTED PASSWORD '$JPY_PSQL_PASSWORD';
+GRANT ALL PRIVILEGES ON DATABASE jupyterhub TO jupyterhub;
 \q
-PGPASSWORD=$DB_PASSWORD psql "sslmode=disable dbname=example user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
+PGPASSWORD=$DB_PASSWORD psql "sslmode=disable dbname=crossplane_example user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
 \l
 \q
 ```
 
 ```bash
 # Run jupyterhub with the database.
-# export JPY_PSQL_PASSWORD=jupyterhub
-# PGPASSWORD=$DB_PASSWORD psql "sslmode=disable dbname=postgres user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
-# CREATE DATABASE jupyterhub;
-# CREATE USER jupyterhub WITH ENCRYPTED PASSWORD '$JPY_PSQL_PASSWORD';
-# GRANT ALL PRIVILEGES ON DATABASE jupyterhub TO jupyterhub;
-\q
 jupyterhub --db=postgresql://$DB_USERNAME:$DB_PASSWORD@$DB_ENDPOINT:$DB_PORT/jupyterhub
 open http://localhost:8000
 PGPASSWORD=$DB_PASSWORD psql "sslmode=disable dbname=jupyterhub user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
@@ -193,7 +148,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: see-db
-  namespace: default
+  namespace: crossplane-examples
 spec:
   containers:
   - name: see-db
@@ -209,10 +164,7 @@ spec:
           name: db-conn
           key: endpoint
     - name: PGPORT
-      valueFrom:
-        secretKeyRef:
-          name: db-conn
-          key: port
+      value: \"5432\"
     - name: PGUSER
       valueFrom:
         secretKeyRef:
@@ -224,12 +176,13 @@ spec:
           name: db-conn
           key: password
 """ | kubectl create -f -
-kubectl logs see-db
+kubectl describe pod see-db -n crossplane-examples
+kubectl logs see-db -n crossplane-examples
 ```
 
 ```bash
 # Destroy the database.
-kubectl delete pod see-db
+kubectl delete pod see-db -n crossplane-examples
 kubectl delete postgresqlinstance my-db
 ```
 

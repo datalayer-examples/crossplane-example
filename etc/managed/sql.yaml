@@ -7,7 +7,7 @@ spec:
     source: PostgreSQLConnectionSecret
     connectionSecretRef:
       namespace: crossplane-examples
-      name: db-conn-secret
+      name: db-conn
 ---
 apiVersion: postgresql.sql.crossplane.io/v1alpha1
 kind: Database

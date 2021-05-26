@@ -16,11 +16,12 @@ helm install crossplane \
   sleep 15
 
 echo
-echo ❇️ Installing Crossplane GCP Provider on the Control cluster
+echo ❇️ Installing Crossplane GCP, Helm, SQL Providers on the Control cluster
 echo
 
 kubectl crossplane install provider crossplane/provider-gcp:master && \
   kubectl crossplane install provider crossplane/provider-helm:master && \
+  kubectl crossplane install provider crossplane/provider-sql:master && \
   sleep 60
 
 echo

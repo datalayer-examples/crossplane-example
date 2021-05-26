@@ -1,0 +1,6 @@
+apiVersion: example.datalayer.io/v1alpha1
+kind: ExampleUI
+metadata:
+  name: exampleui-1-cluster
+spec:
+  clusterVersion: "1.18"

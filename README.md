@@ -32,9 +32,9 @@ Step 4: [Create GCP managed resources](./docs/04-managed.md).
 
 Step 5: [Deploy Helm releases](./docs/05-helm.md).
 
-Step 6: [Deploy a Reference Platform](./docs/07-ref-platform.md).
+Step 6: [Deploy a Configuration](./docs/06-configuration.md).
 
-Step 7: [Deploy a Configuration](./docs/06-configuration.md).
+Step 7: [Deploy a Reference Platform](./docs/07-ref-platform.md).
 
 Step 8: [Deploy a Wordpress Cluster](./docs/08-wordpress-cluster.md).
 

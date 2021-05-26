@@ -70,7 +70,7 @@ spec:
           transforms:
             - type: string
               string:
-                fmt: "%s-wp-gkecluster"
+                fmt: "%s-wordpress-gkecluster"
         - fromFieldPath: "spec.clusterVersion"
           toFieldPath: "spec.forProvider.initialClusterVersion"
       connectionDetails:
@@ -140,7 +140,7 @@ spec:
           transforms:
             - type: string
               string:
-                fmt: "%s-wp-mysql"
+                fmt: "%s-wordpress-mysql"
         - fromFieldPath: "spec.parameters.storageGB"
           toFieldPath: "spec.forProvider.settings.dataDiskSizeGb"
     - base:
@@ -162,7 +162,7 @@ spec:
           transforms:
             - type: string
               string:
-                fmt: "%s-wp-gkecluster"
+                fmt: "%s-wordpress-gkecluster"
       readinessChecks:
         - type: None
     - base:
@@ -214,16 +214,16 @@ spec:
           transforms:
             - type: string
               string:
-                fmt: "%s-wp-mysql"
+                fmt: "%s-wordpress-mysql"
         - fromFieldPath: "metadata.uid"
           toFieldPath: spec.forProvider.set[1].valueFrom.secretKeyRef.name
           transforms:
             - type: string
               string:
-                fmt: "%s-wp-mysql"
+                fmt: "%s-wordpress-mysql"
         - fromFieldPath: "metadata.uid"
           toFieldPath: spec.forProvider.set[2].valueFrom.secretKeyRef.name
           transforms:
             - type: string
               string:
-                fmt: "%s-wp-mysql"
+                fmt: "%s-wordpress-mysql"

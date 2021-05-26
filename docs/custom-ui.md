@@ -67,9 +67,6 @@ echo """export DB_HOST=localhost
 export DB_PORT=5432
 export DB_USERNAME=datalayer
 export DB_PASSWORD=datalayer""" > .env
-```
-
-```bash
 # Source that .env file in your shell environment.
 source .env
 printenv | grep "DB_"
@@ -105,7 +102,11 @@ DB_LOCAL_START=true""" > .docker-env
 # Start a local docker container.
 echo open http://localhost:8765
 make docker-start
-# Stop the local docker container
+make docker-logs
+```
+
+```bash
+# Stop the local docker container.
 make docker-rm
 ```
 
@@ -123,7 +124,7 @@ watch make helm-status
 ```
 
 ```bash
-# Browser the UI.
+# Browse the UI.
 # Option 1 - Connect with a proxy.
 echo open http://localhost:8001/api/v1/namespaces/crossplane-examples/services/http:crossplane-examples-service:8765/proxy/
 kubectl proxy
@@ -143,38 +144,59 @@ make helm-rm
 
 ```bash
 # Push the docker image to your registry.
+# REGISTRY=docker.io/datalayer make docker-push-registry
 REGISTRY=<YOUR_REGISTRY> make docker-push-registry
 ```
 
 ```bash
-# 🚧 Create a GKE workload Cluster
-make gke-example-create # create a gke cluster example.
-make crossplane-status
+# Install the ExampleUI configuration.
+kubectl apply -f ./etc/configuration/example-ui/config
+kubectl get xrd | grep exampleuis
 ```
 
 ```bash
-# 🚧 Install the Helm chart.
-make helm-install
+# Claim a ExampleUI cluster.
+kubectl apply -f ./etc/configuration/example-ui/claim
 ```
 
 ```bash
-# Connect with a proxy.
+# Get the ExampleUI cluster status.
+watch kubectl get managed
+kubectl get networks
+kubectl get gkeclusters
+kubectl get cloudsqlinstances
+kubectl get sql
+kubectl get helm
+kubectl get exampleuis
+```
+
+```bash
+# Connect to the workload GKE cluster.
+K8S_SECRET=$(kubectl get secrets -n crossplane-system | grep gkecluster | awk '{print $1;}')
+kubectl describe secret $K8S_SECRET -n crossplane-system
+kubectl get secret $K8S_SECRET -n crossplane-system -o jsonpath='{.data.kubeconfig}' | base64 --decode > kubeconfig
+kubectl --kubeconfig kubeconfig get pods -A
+```
+
+```bash
+# Browse the ExampleUI with a proxy.
 echo open http://localhost:8001/api/v1/namespaces/crossplane-examples/services/http:crossplane-examples-service:8765/proxy/
-kubectl proxy
+kubectl --kubeconfig kubeconfig proxy
 ```
 
 ```bash
-# 🚧 Connect to the database.
-export DB_ENDPOINT=$(kubectl get secret crossplane-example-role-secret -n crossplane-examples -o jsonpath='{.data.endpoint}' | base64 --decode)
-export DB_USERNAME=$(kubectl get secret crossplane-example-role-secret -n crossplane-examples -o jsonpath='{.data.username}' | base64 --decode)
-export DB_PASSWORD=$(kubectl get secret crossplane-example-role-secret -n crossplane-examples -o jsonpath='{.data.password}' | base64 --decode)
-PGPASSWORD=$DB_PASSWORD psql "dbname=crossplane_examples user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
+# Connect to the database.
+DB_SECRET=$(kubectl get secrets -n crossplane-system | grep postgresql | awk '{print $1;}')
+kubectl describe secret $DB_SECRET -n crossplane-system
+export DB_ENDPOINT=$(kubectl get secret $DB_SECRET -n crossplane-system -o jsonpath='{.data.endpoint}' | base64 --decode)
+export DB_USERNAME=$(kubectl get secret $DB_SECRET -n crossplane-system -o jsonpath='{.data.username}' | base64 --decode)
+export DB_PASSWORD=$(kubectl get secret $DB_SECRET -n crossplane-system -o jsonpath='{.data.password}' | base64 --decode)
+PGPASSWORD=$DB_PASSWORD psql "dbname=postgres user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
 \l
 \q
 ```
 
 ```bash
-# Terminate the resources.
-make helm-rm
-make gke-example-rm # delete the gke cluster example.
+# Terminate the ExampleUI cluster.
+kubectl delete -f ./etc/configuration/example-ui/claim
 ```

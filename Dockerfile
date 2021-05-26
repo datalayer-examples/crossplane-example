@@ -30,13 +30,13 @@ RUN /etc/init.d/postgresql start && \
     psql -c "CREATE USER datalayer WITH SUPERUSER PASSWORD 'datalayer';" && \
     psql -c "CREATE DATABASE crossplane_examples;" && \
     psql -c "GRANT ALL PRIVILEGES ON DATABASE crossplane_examples TO datalayer;"
+
 RUN /etc/init.d/postgresql start && \
     psql -c "CREATE TABLE USERS (ID SERIAL, FIRST_NAME TEXT NOT NULL, LAST_NAME TEXT NOT NULL);" -d crossplane_examples
 
 USER root
 
 RUN mkdir /opt/crossplane-examples
-
 WORKDIR /opt/crossplane-examples
 
 COPY . /opt/crossplane-examples/

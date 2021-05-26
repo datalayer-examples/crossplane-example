@@ -1,0 +1,30 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: exampleuis.example.datalayer.io
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: example.datalayer.io
+  names:
+    kind: ExampleUI
+    listKind: ExampleUIList
+    plural: exampleuis
+    singular: exampleui
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A ExampleUI is a composite resource that represents a K8S Cluster with Wordpress Installed
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                clusterVersion:
+                  type: string
+                  description: GKE cluster version
+              required:
+                - clusterVersion

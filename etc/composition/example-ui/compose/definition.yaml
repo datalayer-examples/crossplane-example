@@ -9,15 +9,15 @@ spec:
   names:
     kind: ExampleUI
     listKind: ExampleUIList
-    plural: exampleuis
     singular: exampleui
+    plural: exampleuis
   versions:
     - name: v1alpha1
       served: true
       referenceable: true
       schema:
         openAPIV3Schema:
-          description: A ExampleUI is a composite resource that represents a K8S Cluster with Wordpress Installed
+          description: A ExampleUI is a composite resource that represents a K8S Cluster with an example ui installed
           type: object
           properties:
             spec:

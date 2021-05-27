@@ -61,16 +61,16 @@ start:
 		yarn start )
 
 platform-ref-install: # install platform ref.
-	kubectl apply -f ./etc/configuration/platform-ref-gcp/network
-	kubectl apply -f ./etc/configuration/platform-ref-gcp/cluster/services
-	kubectl apply -f ./etc/configuration/platform-ref-gcp/cluster/gke
-	kubectl apply -f ./etc/configuration/platform-ref-gcp/cluster
+	kubectl apply -f ./etc/composition/platform-ref-gcp/network
+	kubectl apply -f ./etc/composition/platform-ref-gcp/cluster/services
+	kubectl apply -f ./etc/composition/platform-ref-gcp/cluster/gke
+	kubectl apply -f ./etc/composition/platform-ref-gcp/cluster
 
 platform-ref-claim: # deploy platform ref.
-	kubectl apply -f ./etc/configuration/platform-ref-gcp/examples
+	kubectl apply -f ./etc/composition/platform-ref-gcp/examples
 
 platform-ref-destroy: # deploy platform ref.
-	kubectl delete -f ./etc/configuration/platform-ref-gcp/examples
+	kubectl delete -f ./etc/composition/platform-ref-gcp/examples
 
 platform-kubeconfig: # get kubeconfig
 	@exec echo $(kubectl get secret cluster-conn -n default -o jsonpath='{.data.kubeconfig}') | base64 --decode > kubeconfig

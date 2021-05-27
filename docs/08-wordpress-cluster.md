@@ -6,7 +6,7 @@ Define your Wordpress cluster configuration composed of a GKE cluster, a databas
 
 ```bash
 # Taken from https://github.com/crossplane-contrib/provider-helm/tree/master/examples/in-composition
-kubectl apply -f ./etc/configuration/wordpress-cluster/config
+kubectl apply -f ./etc/composition/wordpress-cluster/compose
 kubectl get xrd | grep wordpressclusters
 ```
 
@@ -15,7 +15,7 @@ kubectl get xrd | grep wordpressclusters
 Claim a Wordpress cluster.
 
 ```bash
-kubectl apply -f ./etc/configuration/wordpress-cluster/claim
+kubectl apply -f ./etc/composition/wordpress-cluster/claim
 ```
 
 Get the status of the Wordpress cluster.
@@ -33,7 +33,7 @@ kubectl describe wordpressclusters
 ## Terminate
 
 ```bash
-kubectl delete -f ./etc/configuration/wordpress-cluster/claim
+kubectl delete -f ./etc/composition/wordpress-cluster/claim
 ```
 
 ## Build
@@ -41,7 +41,7 @@ kubectl delete -f ./etc/configuration/wordpress-cluster/claim
 Once you are confident with your configuration, build, publish and use it as a package.
 
 ```bash
-cd ./etc/wordpress-cluster/config && \
+cd ./etc/wordpress-cluster/compoose && \
   kubectl crossplane build configuration
 ls *.xpkg
 REG=<YOUR_REGISTRY>

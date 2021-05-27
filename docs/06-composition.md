@@ -1,4 +1,4 @@
-# 🚧 Step 6: Deploy a Configuration
+# 🚧 Step 6: Deploy a Composition
 
 Read the official documentation about `Configuration`on the [Crossplane documentation website](https://crossplane.github.io/docs/v1.2/getting-started/create-configuration.html).
 
@@ -6,13 +6,13 @@ Read the official documentation about `Configuration`on the [Crossplane document
 
 ```bash
 # Taken from https://github.com/crossplane/crossplane/tree/master/docs/snippets/package/gcp
-kubectl crossplane build configuration -f ./etc/configuration/getting-started
-ls ./etc/configuration/getting-started/*.xpkg
+kubectl crossplane build configuration -f ./etc/composition/getting-started-gcp
+ls ./etc/composition/getting-started/*.xpkg
 ```
 
 ```bash
 # 🚧 Failing with cannot unpack package: failed to fetch package digest from remote: Get "https://./v2/": dial tcp: lookup .: no such host
-kubectl crossplane install configuration ./etc/configuration/getting-started/getting-started-with-gcp-31f1c8fc4c54.xpgk
+kubectl crossplane install configuration ./etc/composition/getting-started-gcp/getting-started-with-gcp-....xpgk
 kubectl get configuration
 kubectl describe configuration
 ```

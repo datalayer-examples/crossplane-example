@@ -149,14 +149,14 @@ REGISTRY=<YOUR_REGISTRY> make docker-push-registry
 ```
 
 ```bash
-# Install the ExampleUI configuration.
-kubectl apply -f ./etc/configuration/example-ui/config
+# Install the ExampleUI composition.
+kubectl apply -f ./etc/composition/example-ui/compose
 kubectl get xrd | grep exampleuis
 ```
 
 ```bash
 # Claim a ExampleUI cluster.
-kubectl apply -f ./etc/configuration/example-ui/claim
+kubectl apply -f ./etc/composition/example-ui/claim
 ```
 
 ```bash
@@ -200,5 +200,5 @@ SELECT * FROM USERS;
 
 ```bash
 # Terminate the ExampleUI cluster.
-kubectl delete -f ./etc/configuration/example-ui/claim
+kubectl delete -f ./etc/composition/example-ui/claim
 ```

@@ -171,28 +171,30 @@ kubectl get exampleuis
 ```
 
 ```bash
-# Connect to the workload GKE cluster.
+# Proxy to the workload GKE cluster.
 K8S_SECRET=$(kubectl get secrets -n crossplane-system | grep gkecluster | awk '{print $1;}')
 kubectl describe secret $K8S_SECRET -n crossplane-system
 kubectl get secret $K8S_SECRET -n crossplane-system -o jsonpath='{.data.kubeconfig}' | base64 --decode > kubeconfig
 kubectl --kubeconfig kubeconfig get pods -A
-```
-
-```bash
-# Browse the ExampleUI with a proxy.
+# Browse the ExampleUI with a proxy and insert records.
 echo open http://localhost:8001/api/v1/namespaces/crossplane-examples/services/http:crossplane-examples-service:8765/proxy/
 kubectl --kubeconfig kubeconfig proxy
 ```
 
 ```bash
 # Connect to the database.
-DB_SECRET=$(kubectl get secrets -n crossplane-system | grep postgresql | awk '{print $1;}')
+# DB_SECRET=$(kubectl get secrets -n crossplane-system | grep postgresql | awk '{print $1;}')
+# kubectl describe secret $DB_SECRET -n crossplane-system
+DB_SECRET=$(kubectl get secrets -n crossplane-system | grep crossplane-example-role-secret | awk '{print $1;}')
 kubectl describe secret $DB_SECRET -n crossplane-system
 export DB_ENDPOINT=$(kubectl get secret $DB_SECRET -n crossplane-system -o jsonpath='{.data.endpoint}' | base64 --decode)
 export DB_USERNAME=$(kubectl get secret $DB_SECRET -n crossplane-system -o jsonpath='{.data.username}' | base64 --decode)
 export DB_PASSWORD=$(kubectl get secret $DB_SECRET -n crossplane-system -o jsonpath='{.data.password}' | base64 --decode)
 PGPASSWORD=$DB_PASSWORD psql "dbname=postgres user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
 \l
+\c crossplane_examples
+# You are now connected to database "crossplane_examples" as user "crossplane-example-role".
+SELECT * FROM USERS;
 \q
 ```
 

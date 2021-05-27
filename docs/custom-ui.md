@@ -16,9 +16,9 @@ You need the following tools on your local environment.
 ## Environment
 
 ```bash
-# Remove the existing environment if you want to start from zero.
+# Setup your development environment.
 conda deactivate && \
-  make env-rm
+  make env-rm # If you want to reset your env.
 # Create your conda environment.
 make env && \
   conda activate crossplane-examples

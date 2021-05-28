@@ -44,7 +44,7 @@ How to [Troubleshoot](./docs/10-troubleshoot.md) if needed, hopefully not too mu
 
 ## Custom Web User Interface
 
-Build and deploy a UI to insert and view a list of rows from a Postgresql table deployed on GCP. Follow [these instructions](./docs/custom-ui.md) to get the following UI in your browser.
+Build and deploy a UI to insert and view a list of rows from a Postgresql table deployed on GCP. Follow [these instructions](./docs/example-ui.md) to get the following UI in your browser.
 
 <img src="./static/images/users.png" style="max-width: 800px"/>
 

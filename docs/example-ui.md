@@ -173,6 +173,7 @@ kubectl get exampleuis
 ```bash
 # Proxy to the workload GKE cluster.
 K8S_SECRET=$(kubectl get secrets -n crossplane-system | grep gkecluster | awk '{print $1;}')
+echo $K8S_SECRET
 kubectl describe secret $K8S_SECRET -n crossplane-system
 kubectl get secret $K8S_SECRET -n crossplane-system -o jsonpath='{.data.kubeconfig}' | base64 --decode > kubeconfig
 kubectl --kubeconfig kubeconfig get pods -A
@@ -185,7 +186,8 @@ kubectl --kubeconfig kubeconfig proxy
 # Connect to the database.
 # DB_SECRET=$(kubectl get secrets -n crossplane-system | grep postgresql | awk '{print $1;}')
 # kubectl describe secret $DB_SECRET -n crossplane-system
-DB_SECRET=$(kubectl get secrets -n crossplane-system | grep crossplane-example-role-secret | awk '{print $1;}')
+DB_SECRET=$(kubectl get secrets -n crossplane-system | grep role-exampleui-postgresql | awk '{print $1;}')
+echo $DB_SECRET
 kubectl describe secret $DB_SECRET -n crossplane-system
 export DB_ENDPOINT=$(kubectl get secret $DB_SECRET -n crossplane-system -o jsonpath='{.data.endpoint}' | base64 --decode)
 export DB_USERNAME=$(kubectl get secret $DB_SECRET -n crossplane-system -o jsonpath='{.data.username}' | base64 --decode)

@@ -6,6 +6,7 @@
 
 ```bash
 # Install CLI.
+# curl -sL https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh | sh
 curl -sL https://raw.githubusercontent.com/crossplane/crossplane/release-1.2/install.sh | sh
 mv kubectl-crossplane $(dirname $(which kubectl))
 kubectl crossplane -h

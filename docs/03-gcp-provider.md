@@ -4,8 +4,7 @@
 
 ```bash
 # Option 1 - Using the Crossplane CLI.
-# kubectl crossplane install provider crossplane/provider-gcp:v0.17.1
-kubectl crossplane install provider crossplane/provider-gcp:master
+kubectl crossplane install provider crossplane/provider-gcp:v0.17.1
 kubectl get pkg
 watch kubectl get providers
 kubectl describe provider crossplane-provider-gcp
@@ -22,19 +21,18 @@ kind: Provider
 metadata:
   name: provider-gcp
 spec:
-  package: \"crossplane/provider-gcp:master\"
+  package: \"crossplane/provider-gcp:v0.17.1\"
 """ | kubectl create -f - 
 ```
 
 ```bash
 # Option 3 - As part of Crossplane Helm chart by adding the following statement to your helm install command:
-# --set provider.packages={crossplane/provider-gcp:master}.
 helm install crossplane \
   --namespace crossplane-system \
   crossplane-stable/crossplane \
   --version 1.2.1 \
   --create-namespace \
-  --set provider.packages={crossplane/provider-gcp:master}
+  --set provider.packages={crossplane/provider-gcp:v0.17.1}
 ```
 
 ## Install more providers
@@ -43,8 +41,7 @@ Watch out when you install the more providers, the later providerconfigs may be 
 
 ```bash
 # Helm provider may be useful for you.
-# kubectl crossplane install provider crossplane/provider-helm:v0.7.0
-kubectl crossplane install provider crossplane/provider-helm:master
+kubectl crossplane install provider crossplane/provider-helm:v0.7.0
 ```
 
 You calso install a `Configuration` shipping the providers.

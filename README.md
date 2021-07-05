@@ -22,15 +22,15 @@ We are trying to stick to some definitions:
 
 You are expected to start from step 1 and follow-up step by step until the end. If you jump directly to a specific step, ensure your environment, including the shell environment variables, are set as expected.
 
-Step 1: [Create GCloud project](./docs/01-gcloud-project.md).
+Step 1: [Create GCloud Project](./docs/01-gcloud-project.md).
 
-Step 2: [Create a Control cluster](./docs/02-control-cluster.md).
+Step 2: [Create a Control Cluster](./docs/02-control-cluster.md).
 
-Step 3: [Create a GCP Provider on the Control cluster](./docs/03-gcp-provider.md)
+Step 3: [Create a GCP Provider on the Control Cluster](./docs/03-gcp-provider.md)
 
-Step 4: [Create GCP managed resources](./docs/04-managed.md).
+Step 4: [Create GCP managed Resources](./docs/04-managed.md).
 
-Step 5: [Deploy Helm releases](./docs/05-helm.md).
+Step 5: [Deploy Helm Releases](./docs/05-helm.md).
 
 Step 6: [Deploy a Composition](./docs/06-composition.md).
 

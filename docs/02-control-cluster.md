@@ -1,19 +1,19 @@
 [![Datalayer](https://raw.githubusercontent.com/datalayer/datalayer/main/res/logo/datalayer-25.svg?sanitize=true)](https://datalayer.io)
 
-# Step 2: Create a Control cluster
+# Step 2: Create a Control Cluster
 
 ## Setup Kubectl Crossplane CLI
 
 ```bash
 # Install CLI.
 # curl -sL https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh | sh
-curl -sL https://raw.githubusercontent.com/crossplane/crossplane/release-1.2/install.sh | sh
+curl -sL https://raw.githubusercontent.com/crossplane/crossplane/release-1.3/install.sh | sh
 mv kubectl-crossplane $(dirname $(which kubectl))
 kubectl crossplane -h
 kubectl crossplane -v
 ```
 
-## Create a Control cluster
+## Create a Control Cluster
 
 ```bash
 # Create Control cluster.
@@ -25,19 +25,12 @@ kubectl config use-context kind-$CONTROL_CLUSTER_NAME
 ```bash
 # ... or if you also need a local registry.
 ./sbin/create-kind.sh
-# Test the local registry.
-docker pull gcr.io/google-samples/hello-app:1.0
-docker tag gcr.io/google-samples/hello-app:1.0 localhost:5000/hello-app:1.0
-docker push localhost:5000/hello-app:1.0
-kubectl create deployment hello-server --image=localhost:5000/hello-app:1.0
-k get deployment hello-server
-k delete deployment hello-server
 ```
 
-## Deploy Crossplane Controller on the Control cluster
+## Deploy Crossplane Controller on the Control Cluster
 
 ```bash
-# https://crossplane.github.io/docs/v1.2/reference/install.html
+# https://crossplane.github.io/docs/v1.3/reference/install.html
 helm repo add crossplane-stable https://charts.crossplane.io/stable
 helm repo update
 ```
@@ -46,7 +39,16 @@ helm repo update
 helm install crossplane \
   --namespace crossplane-system \
   crossplane-stable/crossplane \
-  --version 1.2.1 \
+  --version 1.3.0 \
   --create-namespace
 watch kubectl get all -n crossplane-system
 ```
+
+```bash
+# Create a crossplanee-examples namespace for later usage.
+echo """
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: crossplane-examples
+""" | kubectl create -f -

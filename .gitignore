@@ -34,6 +34,7 @@ kubeconfig
 helm-charts
 **/*-provider-key.json
 **/*.xpkg
+jupyterhub_cookie_secret
 
 ### Include
 

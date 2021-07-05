@@ -9,9 +9,9 @@ You are going to build and deploy a UI (React.js web application) to connect to 
 You need the following tools on your local environment.
 
 - [Conda](https://docs.conda.io/en/latest/miniconda.html).
+- [Postgresql](https://www.postgresql.org) server if you want to test the UI locally.
 - [Kubectl](https://kubernetes.io/docs/tasks/tools).
 - [Helm](https://helm.sh).
-- [Postgresql](https://www.postgresql.org) server if you want to test the UI locally.
 
 ## Environment
 
@@ -37,7 +37,7 @@ make install
 make build
 ```
 
-## Test with a local database
+## Test with a local Database
 
 You need a running postgresql database with a role, e.g. `datalayer`.
 
@@ -80,7 +80,7 @@ echo open http://localhost:8765 # The Python server.
 make start
 ```
 
-## Docker image
+## Docker Image
 
 To run on a Kubernetes cluster, you need a docker image.
 
@@ -110,7 +110,7 @@ make docker-logs
 make docker-rm
 ```
 
-## Run on the Control cluster
+## Run on the Control Cluster
 
 ```bash
 # Push the docker image to local registry.
@@ -140,7 +140,7 @@ open http://localhost:30000
 make helm-rm
 ```
 
-## Run on a Workload cluster
+## Run on a Workload Cluster
 
 ```bash
 # Push the docker image to your registry.

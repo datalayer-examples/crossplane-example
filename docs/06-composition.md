@@ -2,6 +2,43 @@
 
 Read the official documentation about `Configuration`on the [Crossplane documentation website](https://crossplane.github.io/docs/v1.2/getting-started/create-configuration.html).
 
+## Create a Composed Database
+
+```bash
+# Create a composed PostgreSQLInstance database.
+# Composition available in https://github.com/crossplane/crossplane/tree/d04a059fe341a941760a3a94ef07085ae7158365/docs/snippets/package/gcp
+# Docs on https://crossplane.io/docs/v1.3/getting-started/create-configuration.html
+kubectl apply -f ./etc/composition/getting-started-gcp/definition.yaml && \
+  kubectl apply -f ./etc/composition/getting-started-gcp/composition.yaml
+echo """
+apiVersion: database.example.org/v1alpha1
+kind: PostgreSQLInstance
+metadata:
+  name: my-db
+  namespace: default
+spec:
+  parameters:
+    storageGB: 20
+  compositionSelector:
+    matchLabels:
+      provider: gcp
+  writeConnectionSecretToRef:
+    name: db-conn
+""" | kubectl create -f -
+kubectl get managed
+kubectl get postgresqlinstance my-db
+kubectl describe postgresqlinstance my-db
+kubectl describe cloudsqlinstance my-db
+# kubectl describe cloudsqlinstance.database.gcp.crossplane.io/my-db-d8z4g-6rf6v
+kubectl describe secrets db-conn
+open https://console.cloud.google.com/sql/instances?project=$PROJECT_ID
+```
+
+```bash
+# Destroy the PostgreSQLInstance database.
+kubectl delete postgresqlinstance my-db
+```
+
 ## Build your Configuration
 
 ```bash

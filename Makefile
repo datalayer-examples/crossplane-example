@@ -22,6 +22,8 @@ clean:
 	rm -fr build
 	rm -fr dist
 	rm kubeconfig
+	rm jupyterhub_cookie_secret
+	rm crossplane-gcp-provider-key.json
 	rm -fr *.egg-info
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '__pycache__' -exec rm -fr {} +

@@ -1,6 +1,6 @@
 [![Datalayer](https://raw.githubusercontent.com/datalayer/datalayer/main/res/logo/datalayer-25.svg?sanitize=true)](https://datalayer.io)
 
-# Step 1: Create GCloud project
+# Step 1: Create GCloud Project
 
 ```bash
 # Get to https://console.cloud.google.com/billing and copy the Billing Account ID value.
@@ -10,7 +10,7 @@ RAND=$RANDOM
 PROJECT_ID="crossplane-example-$RAND"
 ```
 
-## Create a GCloud project
+## Create a GCloud Project
 
 ```bash
 gcloud projects create $PROJECT_ID --enable-cloud-apis # [--organization $ORGANIZATION_ID]
@@ -19,14 +19,14 @@ gcloud config set project $PROJECT_ID
 # PROJECT_ID=$(gcloud projects list --filter NAME=<YOUR_PROJECT_NAME> --format="value(PROJECT_ID)")
 ```
 
-## Link billing to your project
+## Link Billing to your Project
 
 ```bash
 # Link billing to the new project.
 gcloud beta billing projects link $PROJECT_ID --billing-account=$ACCOUNT_ID
 ```
 
-## Enable GCloud services on your project
+## Enable GCloud Services on your Project
 
 ```bash
 # Enable service on the new project.
@@ -48,7 +48,7 @@ SERVICE_ACCOUNT="${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 gcloud iam service-accounts create $SERVICE_ACCOUNT_NAME --project $PROJECT_ID --display-name "Crossplane Example"
 ```
 
-## Assign GCloud roles to your project
+## Assign GCloud Roles to your Project
 
 ```bash
 # Assign roles.
@@ -57,7 +57,12 @@ gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SER
 gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SERVICE_ACCOUNT" --role="roles/compute.networkAdmin"
 gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SERVICE_ACCOUNT" --role="roles/storage.admin"
 gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SERVICE_ACCOUNT" --role="roles/cloudsql.admin"
-# Enable Additional roles needed for the example or project.
-# Run `gcloud iam roles list` for a complete list.
+```
+
+Enable additional roles needed for your needs.
+
+```bash
+# To get a complete list of roles
+gcloud iam roles list
 # gcloud projects add-iam-policy-binding $PROJECT_ID --member "serviceAccount:$SERVICE_ACCOUNT" --role="roles/redis.admin"
 ```

@@ -49,3 +49,13 @@ data:
     host: "localhost:${reg_port}"
     help: "https://kind.sigs.k8s.io/docs/user/local-registry/"
 EOF
+
+echo """
+# Test the local registry.
+docker pull gcr.io/google-samples/hello-app:1.0
+docker tag gcr.io/google-samples/hello-app:1.0 localhost:5000/hello-app:1.0
+docker push localhost:5000/hello-app:1.0
+kubectl create deployment hello-server --image=localhost:5000/hello-app:1.0
+kubectl get deployment hello-server
+kubectl delete deployment hello-server
+"""

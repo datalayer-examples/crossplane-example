@@ -1,12 +1,12 @@
 ## Step 9: Destroy
 
-## Destroy the applications
+## Destroy the Applications
 
 ```bash
 helm delete crossplane --namespace crossplane-system
 ```
 
-## Destroy the infrastructure
+## Destroy the Infrastructure
 
 ```bash
 # https://crossplane.github.io/docs/v1.2/reference/uninstall.html
@@ -50,13 +50,13 @@ kubectl patch lock lock -p '{"metadata":{"finalizers": []}}' --type=merge
 kubectl get crd -o name | grep crossplane.io | xargs kubectl delete
 ```
 
-## Destroy the Control cluster
+## Destroy the Control Cluster
 
 ```bash
 kind delete cluster --name $CONTROL_CLUSTER_NAME
 ```
 
-## Destroy the GCloud project
+## Destroy the GCloud Project
 
 ```bash
 gcloud projects delete $PROJECT_ID

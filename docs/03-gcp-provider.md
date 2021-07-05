@@ -35,7 +35,7 @@ helm install crossplane \
   --set provider.packages={crossplane/provider-gcp:v0.17.1}
 ```
 
-## Install more providers
+## Install more Providers
 
 Watch out when you install the more providers, the later providerconfigs may be hidden (read more on e.g. [provider-helm hides providerconfigs](https://github.com/crossplane-contrib/provider-helm/issues/89)).
 
@@ -44,7 +44,9 @@ Watch out when you install the more providers, the later providerconfigs may be 
 kubectl crossplane install provider crossplane/provider-helm:v0.7.0
 ```
 
-You calso install a `Configuration` shipping the providers.
+## Install more providers with a Configuration
+
+You can also install a `Configuration` shipping the providers.
 
 ```bash
 # Install platform-ref-gcp configuration that contains provider-gcp and provider-helm.

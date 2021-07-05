@@ -1,9 +1,9 @@
-## Step 4: Create GCP managed resources
+## Step 4: Create GCP Managed Resources
 
 ## Create a Managed Bucket
 
 ```bash
-# https://raw.githubusercontent.com/crossplane/provider-gcp/master/examples/storage/bucket.yaml
+# Example taken from https://raw.githubusercontent.com/crossplane/provider-gcp/master/examples/storage/bucket.yaml
 BUCKET_NAME=crossplane-example-$RAND
 echo """
 apiVersion: storage.gcp.crossplane.io/v1alpha3
@@ -36,17 +36,12 @@ kubectl delete bucket.storage.gcp.crossplane.io/example
 ## Create a Managed Database
 
 ```bash
-# Create a database.
+# Create a CloudSQLInstance database.
 echo """
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: crossplane-examples
----
 apiVersion: database.gcp.crossplane.io/v1beta1
 kind: CloudSQLInstance
 metadata:
-  name: crossplane-example-db-1
+  name: crossplane-example-db
 spec:
   forProvider:
     databaseVersion: POSTGRES_9_6
@@ -63,82 +58,11 @@ spec:
     name: db-conn
 """ | kubectl create -f -
 kubectl get managed
-kubectl get cloudsqlinstances
 kubectl get cloudsqlinstance crossplane-example-db
+kubectl describe cloudsqlinstance crossplane-example-db
 kubectl describe secret db-conn -n crossplane-examples
 kubectl get secret db-conn -n crossplane-examples -o jsonpath='{.data.endpoint}' | base64 --decode
-open https://console.cloud.google.com/sql/instances/crossplane-example-db-1?project=$PROJECT_ID
-kubectl delete cloudsqlinstance crossplane-example-db-1
-```
-
-```bash
-# Create a composed database.
-# Composition available in https://github.com/crossplane/crossplane/tree/d04a059fe341a941760a3a94ef07085ae7158365/docs/snippets/package/gcp
-# Docs on https://crossplane.io/docs/v1.2/getting-started/create-configuration.html
-echo """
-apiVersion: database.example.org/v1alpha1
-kind: PostgreSQLInstance
-metadata:
-  name: my-db
-  namespace: default
-spec:
-  parameters:
-    storageGB: 20
-  compositionSelector:
-    matchLabels:
-      provider: gcp
-  writeConnectionSecretToRef:
-    name: db-conn
-""" | kubectl create -f -
-kubectl get managed
-kubectl get postgresqlinstance my-db
-kubectl describe postgresqlinstance my-db
-kubectl describe cloudsqlinstance my-db
-# kubectl describe cloudsqlinstance.database.gcp.crossplane.io/my-db-d8z4g-6rf6v
-kubectl describe secrets db-conn
-open https://console.cloud.google.com/sql/instances?project=$PROJECT_ID
-```
-
-```bash
-# https://github.com/datalayer-externals/crossplane-provider-sql
-kubectl crossplane install provider crossplane/provider-sql:master
-kubectl get providers
-k describe providers crossplane-provider-sql
-kubectl create -f ./etc/managed/sql.yaml
-kubectl get sql
-kubectl describe database.postgresql.sql.crossplane.io/crossplane-examples 
-```
-
-```bash
-# Connect to the database https://cloud.google.com/sql/docs/postgstatic/images/connect-admin-ip
-export DB_ENDPOINT=$(kubectl get secret db-conn -n crossplane-examples -o jsonpath='{.data.endpoint}' | base64 --decode)
-# export DB_PORT=$(kubectl get secret db-conn -n crossplane-examples -o jsonpath='{.data.port}' | base64 --decode)
-export DB_PORT=5432
-export DB_USERNAME=$(kubectl get secret db-conn -n crossplane-examples -o jsonpath='{.data.username}' | base64 --decode)
-export DB_PASSWORD=$(kubectl get secret db-conn -n crossplane-examples -o jsonpath='{.data.password}' | base64 --decode)
-export JPY_PSQL_PASSWORD=jupyterhub
-PGPASSWORD=$DB_PASSWORD psql "sslmode=disable dbname=postgres user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
-\l
-CREATE DATABASE jupyterhub;
-CREATE USER jupyterhub WITH ENCRYPTED PASSWORD '$JPY_PSQL_PASSWORD';
-GRANT ALL PRIVILEGES ON DATABASE jupyterhub TO jupyterhub;
-\q
-PGPASSWORD=$DB_PASSWORD psql "sslmode=disable dbname=crossplane_example user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
-\l
-\q
-```
-
-```bash
-# Run jupyterhub with the database.
-jupyterhub --db=postgresql://$DB_USERNAME:$DB_PASSWORD@$DB_ENDPOINT:$DB_PORT/jupyterhub
-open http://localhost:8000
-PGPASSWORD=$DB_PASSWORD psql "sslmode=disable dbname=jupyterhub user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
-\d
-SELECT * FROM pg_catalog.pg_tables where schemaname='public';
-SELECT * FROM users;
-SELECT * FROM groups;
-SELECT * FROM servers;
-\q
+open https://console.cloud.google.com/sql/instances/crossplane-example-db?project=$PROJECT_ID
 ```
 
 ```bash
@@ -181,15 +105,59 @@ kubectl logs see-db -n crossplane-examples
 ```
 
 ```bash
+# https://github.com/datalayer-externals/crossplane-provider-sql
+kubectl crossplane install provider crossplane/provider-sql:master
+kubectl get providers
+k describe providers crossplane-provider-sql
+kubectl create -f ./etc/managed/sql.yaml
+kubectl get sql
+kubectl describe database.postgresql.sql.crossplane.io/crossplane-examples 
+```
+
+```bash
+# Connect to the database https://cloud.google.com/sql/docs/postgstatic/images/connect-admin-ip
+export DB_ENDPOINT=$(kubectl get secret db-conn -n crossplane-examples -o jsonpath='{.data.endpoint}' | base64 --decode)
+# export DB_PORT=$(kubectl get secret db-conn -n crossplane-examples -o jsonpath='{.data.port}' | base64 --decode)
+export DB_PORT=5432
+export DB_USERNAME=$(kubectl get secret db-conn -n crossplane-examples -o jsonpath='{.data.username}' | base64 --decode)
+export DB_PASSWORD=$(kubectl get secret db-conn -n crossplane-examples -o jsonpath='{.data.password}' | base64 --decode)
+export JPY_PSQL_PASSWORD=jupyterhub
+PGPASSWORD=$DB_PASSWORD psql "sslmode=disable dbname=postgres user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
+\l
+# Should list the crossplan_examples database with owner postgres
+CREATE DATABASE jupyterhub;
+CREATE USER jupyterhub WITH ENCRYPTED PASSWORD '$JPY_PSQL_PASSWORD';
+GRANT ALL PRIVILEGES ON DATABASE jupyterhub TO jupyterhub;
+\l
+\q
+PGPASSWORD=$DB_PASSWORD psql "sslmode=disable dbname=crossplane_examples user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
+\l
+\q
+```
+
+```bash
+# Run a local jupyterhub with the database.
+jupyterhub --db=postgresql://$DB_USERNAME:$DB_PASSWORD@$DB_ENDPOINT:$DB_PORT/jupyterhub
+open http://localhost:8000
+PGPASSWORD=$DB_PASSWORD psql "sslmode=disable dbname=jupyterhub user=$DB_USERNAME hostaddr=$DB_ENDPOINT"
+\d
+SELECT * FROM pg_catalog.pg_tables where schemaname='public';
+SELECT * FROM users;
+SELECT * FROM groups;
+SELECT * FROM servers;
+\q
+```
+
+```bash
 # Destroy the database.
 kubectl delete pod see-db -n crossplane-examples
-kubectl delete postgresqlinstance my-db
+kubectl delete cloudsqlinstance crossplane-example-db
 ```
 
 ## Create a Managed Network
 
 ```bash
-# https://raw.githubusercontent.com/crossplane/provider-gcp/master/examples/compute/network.yaml
+# Example taken from https://raw.githubusercontent.com/crossplane/provider-gcp/master/examples/compute/network.yaml
 echo """
 apiVersion: compute.gcp.crossplane.io/v1beta1
 kind: Network
@@ -211,7 +179,7 @@ open https://console.cloud.google.com/networking/networks/details/gke-test?proje
 ```
 
 ```bash
-# https://github.com/crossplane/provider-gcp/blob/master/examples/compute/subnetwork.yaml
+# Example taken from https://github.com/crossplane/provider-gcp/blob/master/examples/compute/subnetwork.yaml
 echo """
 apiVersion: compute.gcp.crossplane.io/v1beta1
 kind: Subnetwork
@@ -240,7 +208,7 @@ kubectl describe subnetwork.compute.gcp.crossplane.io/gke-test-subnetwork
 open https://console.cloud.google.com/networking/networks/details/gke-test?project=$PROJECT_ID&pageTab=SUBNETS
 ```
 
-## Creata a Managed GKE cluster
+## Creata a Managed GKE Cluster
 
 Pick a name for your GKE workload cluster.
 
@@ -314,6 +282,8 @@ kubectl describe gkecluster.container.gcp.crossplane.io/$GKE_CLUSTER_NAME
 open https://console.cloud.google.com/kubernetes/list?project=$PROJECT_ID
 ```
 
+TODO Migrate to `container.gcp.crossplane.io/v1beta2`: rename `GKECluster` to `Cluster`, see https://github.com/crossplane/provider-gcp/pull/308/files)
+
 Create the GKE cluster Nodepool.
 
 ```bash
@@ -360,7 +330,7 @@ kubectl describe nodepool.container.gcp.crossplane.io/$GKE_CLUSTER_NAME-np
 open https://console.cloud.google.com/kubernetes/list?project=$PROJECT_ID
 ```
 
-Get the GKE kubeconfig for your workload cluster.
+Inspect the GKE credentials for your workload cluster.
 
 ```bash
 kubectl get secret $GKE_CLUSTER_NAME-conn -n crossplane-system
@@ -374,6 +344,11 @@ echo $(kubectl get secret $GKE_CLUSTER_NAME-conn -n crossplane-system -o jsonpat
 echo $(kubectl get secret $GKE_CLUSTER_NAME-conn -n crossplane-system -o jsonpath='{.data.endpoint}') | base64 --decode > endpoint
 echo $(kubectl get secret $GKE_CLUSTER_NAME-conn -n crossplane-system -o jsonpath='{.data.clusterCA}') | base64 --decode > clusterCA
 openssl x509 -in ./clusterCA -noout -text
+```
+
+Get the GKE kubeconfig for your workload cluster.
+
+```bash
 echo $(kubectl get secret $GKE_CLUSTER_NAME-conn -n crossplane-system -o jsonpath='{.data.kubeconfig}') | base64 --decode > kubeconfig
 # Optionally, connect to GKE API via gcloud CLI.
 # KUBECONFIG=$PWD/kubeconfig gcloud container clusters get-credentials $GKE_CLUSTER_NAME --region us-central1-a --project $PROJECT_ID
@@ -383,12 +358,6 @@ echo $(kubectl get secret $GKE_CLUSTER_NAME-conn -n crossplane-system -o jsonpat
 # Connect to GKE API via the provided kubeconfig.
 kubectl --kubeconfig=./kubeconfig cluster-info --context $GKE_CLUSTER_NAME
 kubectl --kubeconfig=./kubeconfig get pods -A
-```
-
-```bash
-# kubectl get compositenetwork
-# kubectl describe compositenew
-# kubectl get managed
 ```
 
 ```bash

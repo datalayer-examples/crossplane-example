@@ -1,2 +1,2 @@
-[![Datalayer](https://raw.githubusercontent.com/datalayer/datalayer/main/res/logo/datalayer-25.svg?sanitize=true)](https://datalayer.io)
+[![Datalayer](https://datalayer.s3.us-east-1.amazonaws.com/datalayer-25.svg)](https://datalayer.io)
 

@@ -6,7 +6,7 @@
 
 This repository showcases different usecase for [Crossplane](https://crossplane.io) on top of [Google Cloud](https://cloud.google.com). It aims to complement the official [Crossplane documentation](https://crossplane.io/docs) to give step-by-step examples to deploy infrastructure and services on [Google Cloud](https://cloud.google.com). It focuses on GCP but can be applied to other clouds like [Amazon](https://aws.amazon.com), [Azure](https://azure.microsoft.com)...
 
-You can read more context about Crossplane on the companion blog post [Crossplane by example](https://blog.datalayer.io/2021/05/16/crossplane-by-example).
+You can read more context about Crossplane on the companion blog post [Crossplane by example](https://datalayer.blog/2021/05/16/crossplane-by-example).
 
 > Ensure you have credits to spend on GCloud to run these examples.
 

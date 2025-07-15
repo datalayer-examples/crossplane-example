@@ -10,7 +10,7 @@ You can read more context about Crossplane on the companion blog post [Crossplan
 
 > Ensure you have credits to spend on GCloud to run these examples.
 
-We have a first section with use case like settting-up the environment, deploying managed and composite resources as helm chart... We also have a second section where we build a custom React.js user interface interacting with a managed database.
+We have a first section with use case like setting-up the environment, deploying managed and composite resources as helm chart... We also have a second section where we build a custom React.js user interface interacting with a managed database.
 
 We are trying to stick to some definitions:
 
